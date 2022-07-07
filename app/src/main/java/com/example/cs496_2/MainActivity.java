@@ -4,7 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -14,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView travelRV;
     private TravelAdapter travelAdapter;
     private ArrayList<TravelModel> travelModels;
-
+    private FloatingActionButton fabAddTravel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +52,22 @@ public class MainActivity extends AppCompatActivity {
         // 리사이클러뷰에 SimpleTextAdapter 객체 지정.
         travelAdapter = new TravelAdapter(this, travelModels);
         travelRV.setAdapter(travelAdapter);
+        travelRV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
+            }
+        });
+
+        // 여행 프로젝트 추가 버튼
+        fabAddTravel = findViewById(R.id.fab);
+        fabAddTravel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, TravelActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
 }

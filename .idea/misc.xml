@@ -3,8 +3,31 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../layout/custom_preview.xml" value="0.38796296296296295" />
+        <entry key="app/src/main/res/drawable/ic_dashboard_black_24dp.xml" value="0.217" />
+        <entry key="app/src/main/res/drawable/ic_home_black_24dp.xml" value="0.217" />
+        <entry key="app/src/main/res/drawable/ic_notifications_black_24dp.xml" value="0.217" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_travel.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/activity_travel_detail.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/layout/blank_fragment.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/layout/fragment_add.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/layout/fragment_item_list_dialog_list_dialog.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/fragment_item_list_dialog_list_dialog_item.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/fragment_login.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/fragment_make_new_travel.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/layout/fragment_notifications.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/layout/fragment_travel_analysis.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/layout/fragment_travel_cover.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/layout/fragment_travel_spend.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/layout/fragment_travel_spend_add.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/item_travel.xml" value="0.29975828810424204" />
+        <entry key="app/src/main/res/layout/travel_detail_activity.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/layout/travel_detail_fragment.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/menu/menu_bottom.xml" value="0.37604166666666666" />
       </map>
     </option>
   </component>
