@@ -6,13 +6,40 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_add"
+        android:contentDescription="@string/make_new_travel" />
+
+    <TextView
+        android:id="@+id/idTVappname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:textSize="@dimen/title"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.022" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/idRVtravel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/idTVappname" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
