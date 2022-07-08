@@ -20,7 +20,6 @@ import java.util.ArrayList;
 
 public class DashboardFragment extends Fragment {
 
-    private FragmentDashboardBinding binding;
 
     // recycler view
     private RecyclerView spend_rv;
@@ -35,7 +34,6 @@ public class DashboardFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
 
         // 리사이클러뷰에 표시할 데이터 리스트 생성.
         dashboardModels = new ArrayList<>();
@@ -71,6 +69,6 @@ public class DashboardFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        binding = null;
+
     }
 }

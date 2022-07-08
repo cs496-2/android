@@ -1,4 +1,4 @@
-package com.example.cs496_2;
+package com.example.cs496_2.ui;
 
 import android.os.Bundle;
 

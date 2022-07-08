@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Cs496_2">
         <activity
-            android:name=".TravelActivity"
+            android:name=".ui.TravelActivity"
             android:exported="false"
             android:label="@string/title_activity_travel" />
         <activity

@@ -39,6 +39,12 @@ public class TravelAdapter extends RecyclerView.Adapter<TravelAdapter.ViewHolder
 //        }
         holder.itemView.setVisibility(View.VISIBLE);
 //        holder.travel_cover.setImageBitmap(model.getCover());
+//        holder.itemView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//            }
+//        });
         holder.travel_cover.setImageResource(R.drawable.default_flights);   // 기본 이미지
         holder.travel_name.setText(model.getName());
         holder.travel_date.setText(String.format("%s ~ %s", model.getStart_date(), model.getEnd_date()));

@@ -19,7 +19,7 @@ import com.example.cs496_2.databinding.FragmentAddBinding;
 
 public class AddFragment extends Fragment {
 
-    private FragmentAddBinding binding;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -34,6 +34,6 @@ public class AddFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        binding = null;
+
     }
 }
