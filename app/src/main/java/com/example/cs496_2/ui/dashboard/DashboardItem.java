@@ -1,6 +1,6 @@
 package com.example.cs496_2.ui.dashboard;
 
-public class DashboardModel {
+public class DashboardItem {
 
     private String id;
     private String spend_name;
@@ -11,7 +11,7 @@ public class DashboardModel {
     private String currency;
 
     // spend 공통 사용
-    public DashboardModel(String id, String spend_name, Float spend_amount, String spend_date, String consume_date, String category, String currency) {
+    public DashboardItem(String id, String spend_name, Float spend_amount, String spend_date, String consume_date, String category, String currency) {
         this.id = id;
         this.spend_name = spend_name;
         this.spend_amount = spend_amount;

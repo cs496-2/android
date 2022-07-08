@@ -17,11 +17,11 @@ import java.util.ArrayList;
 public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.ViewHolder> {
 
     private Context context;
-    private ArrayList<DashboardModel> dashboardModelArrayList;
+    private ArrayList<DashboardItem> dashboardItemArrayList;
 
-    public DashboardAdapter(Context context, ArrayList<DashboardModel> dashboardModelArrayList) {
+    public DashboardAdapter(Context context, ArrayList<DashboardItem> dashboardItemArrayList) {
         this.context = context;
-        this.dashboardModelArrayList = dashboardModelArrayList;
+        this.dashboardItemArrayList = dashboardItemArrayList;
     }
 
     // onCreateViewHolder() - 아이템 뷰를 위한 뷰홀더 객체 생성하여 리턴.
@@ -34,7 +34,7 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.View
     // onBindViewHolder() - position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시.
     @Override
     public void onBindViewHolder(@NonNull DashboardAdapter.ViewHolder holder, int position) {
-        DashboardModel model = dashboardModelArrayList.get(position);
+        DashboardItem model = dashboardItemArrayList.get(position);
         holder.itemView.setVisibility(View.VISIBLE);
 //        holder.itemView.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -50,7 +50,7 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.View
     // getItemCount() - 전체 데이터 갯수 리턴.
     @Override
     public int getItemCount() {
-        return dashboardModelArrayList.size();
+        return dashboardItemArrayList.size();
     }
 
     // 아이템 뷰를 저장하는 뷰홀더 클래스.

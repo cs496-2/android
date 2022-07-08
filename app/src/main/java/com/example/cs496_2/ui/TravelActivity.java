@@ -1,5 +1,6 @@
 package com.example.cs496_2.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.cs496_2.R;
@@ -21,6 +22,7 @@ public class TravelActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // bottom navigation 구조 생성
         binding = ActivityTravelBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -35,6 +37,11 @@ public class TravelActivity extends AppCompatActivity {
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_travel);
         NavigationUI.setupWithNavController(binding.navView, navController);
+
+        Intent intent = getIntent();
+        if (intent != null) {
+
+        }
     }
 
 }

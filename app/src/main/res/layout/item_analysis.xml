@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/iv_spend_category"
+        android:id="@+id/iv_anlz_category"
         android:layout_width="36dp"
         android:layout_height="36dp"
         android:layout_marginVertical="12dp"
@@ -18,28 +17,20 @@
         app:srcCompat="@drawable/ic_baseline_mood_24" />
 
     <TextView
-        android:id="@+id/tv_spend_money"
+        android:id="@+id/tv_anlz_category"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="20dp"
         android:text="TextView"
-        app:layout_constraintStart_toEndOf="@+id/iv_spend_category"
+        app:layout_constraintStart_toEndOf="@+id/iv_anlz_category"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tv_spend_name"
+        android:id="@+id/tv_anlz_amount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
-        app:layout_constraintStart_toStartOf="@+id/tv_spend_money"
-        app:layout_constraintTop_toBottomOf="@+id/tv_spend_money" />
-
-    <TextView
-        android:id="@+id/tv_spend_date_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
+        android:layout_marginEnd="32dp"
         android:text="TextView"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -11,14 +11,14 @@
     <com.github.mikephil.charting.charts.PieChart
         android:id="@+id/pie_chart"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_weight="1"
         android:layout_margin="32dp">
 
     </com.github.mikephil.charting.charts.PieChart>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_spend_analysis"
+    <ListView
+        android:id="@+id/lv_spend_analysis"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

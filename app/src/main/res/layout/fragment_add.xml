@@ -6,34 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.add.AddFragment">
 
-    <RadioGroup
-        android:id="@+id/radioGroup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <RadioButton
-            android:id="@+id/rb_currency1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="화폐1" />
-
-        <RadioButton
-            android:id="@+id/rb_currency2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="화폐2" />
-
-        <RadioButton
-            android:id="@+id/rb_currency3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="화폐3" />
-    </RadioGroup>
-
     <TextView
         android:id="@+id/tv_show_currency"
         android:layout_width="wrap_content"
@@ -50,19 +22,19 @@
         android:id="@+id/editTextNumberSigned"
         android:layout_width="150dp"
         android:layout_height="48dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="32dp"
-        android:gravity="right"
+        android:layout_marginTop="84dp"
+        android:layout_marginEnd="36dp"
         android:ems="10"
+        android:gravity="right"
         android:hint="0"
         android:inputType="numberSigned"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <RadioGroup
         android:id="@+id/rg_spend_category_group"
-        android:layout_width="339dp"
-        android:layout_height="100dp"
+        android:layout_width="350dp"
+        android:layout_height="68dp"
         android:layout_marginTop="32dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
@@ -74,50 +46,106 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="식비" />
+            android:background="@drawable/selector_radio_button"
+            android:button="@null"
+            android:text="식비"
+            android:textAlignment="center"
+            android:textColor="@drawable/selector_radio_text" />
 
         <RadioButton
             android:id="@+id/rb_category2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="쇼핑" />
+            android:background="@drawable/selector_radio_button"
+            android:button="@null"
+            android:text="쇼핑"
+            android:textAlignment="center"
+            android:textColor="@drawable/selector_radio_text" />
 
         <RadioButton
             android:id="@+id/rb_category3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="관광" />
+            android:background="@drawable/selector_radio_button"
+            android:button="@null"
+            android:text="관광"
+            android:textAlignment="center"
+            android:textColor="@drawable/selector_radio_text" />
 
         <RadioButton
             android:id="@+id/rb_category4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="기타" />
+            android:background="@drawable/selector_radio_button"
+            android:button="@null"
+            android:text="교통"
+            android:textAlignment="center"
+            android:textColor="@drawable/selector_radio_text" />
 
         <RadioButton
             android:id="@+id/rb_category5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="숙박" />
+            android:background="@drawable/selector_radio_button"
+            android:button="@null"
+            android:text="숙박"
+            android:textAlignment="center"
+            android:textColor="@drawable/selector_radio_text" />
 
         <RadioButton
             android:id="@+id/rb_category6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="교통" />
+            android:background="@drawable/selector_radio_button"
+            android:button="@null"
+            android:text="기타"
+            android:textAlignment="center"
+            android:textColor="@drawable/selector_radio_text" />
 
+    </RadioGroup>
+
+    <RadioGroup
+        android:id="@+id/rg_spend_group_or_personal"
+        android:layout_width="350dp"
+        android:layout_height="68dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rg_spend_category_group">
+
+        <RadioButton
+            android:id="@+id/rb_spend_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/selector_radio_button"
+            android:button="@null"
+            android:text="공동 지출"
+            android:textAlignment="center"
+            android:textColor="@drawable/selector_radio_text" />
+
+        <RadioButton
+            android:id="@+id/rb_spend_personal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/selector_radio_button"
+            android:button="@null"
+            android:text="개인 지출"
+            android:textAlignment="center"
+            android:textColor="@drawable/selector_radio_text" />
     </RadioGroup>
 
     <EditText
         android:id="@+id/et_spend_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_width="350dp"
+        android:layout_height="48dp"
         android:ems="10"
         android:hint="지출 메모"
         android:inputType="textPersonName"
@@ -126,6 +154,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rg_spend_category_group" />
+        app:layout_constraintTop_toBottomOf="@+id/rg_spend_group_or_personal" />
+
+    <Button
+        android:id="@+id/btn_spend_save"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:text="저장"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.508"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_spend_name" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

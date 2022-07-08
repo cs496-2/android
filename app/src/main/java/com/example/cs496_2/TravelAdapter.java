@@ -1,14 +1,18 @@
 package com.example.cs496_2;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.cs496_2.ui.TravelActivity;
 
 import java.util.ArrayList;
 
@@ -39,12 +43,11 @@ public class TravelAdapter extends RecyclerView.Adapter<TravelAdapter.ViewHolder
 //        }
         holder.itemView.setVisibility(View.VISIBLE);
 //        holder.travel_cover.setImageBitmap(model.getCover());
-//        holder.itemView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//            }
-//        });
+        holder.itemView.setOnClickListener(view -> {    // 여행 리사이클러뷰 누르면 해당 여행 프로젝트 열기
+            Intent intent = new Intent(context, TravelActivity.class);
+            intent.putExtra("travel_name", model.getName());
+            context.startActivity(intent);
+        });
         holder.travel_cover.setImageResource(R.drawable.default_flights);   // 기본 이미지
         holder.travel_name.setText(model.getName());
         holder.travel_date.setText(String.format("%s ~ %s", model.getStart_date(), model.getEnd_date()));

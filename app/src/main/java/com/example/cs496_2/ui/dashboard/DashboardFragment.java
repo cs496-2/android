@@ -4,17 +4,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cs496_2.R;
-import com.example.cs496_2.databinding.FragmentDashboardBinding;
 
 import java.util.ArrayList;
 
@@ -24,7 +21,7 @@ public class DashboardFragment extends Fragment {
     // recycler view
     private RecyclerView spend_rv;
     private DashboardAdapter spend_adapter;
-    private ArrayList<DashboardModel> dashboardModels;
+    private ArrayList<DashboardItem> dashboardItems;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -36,8 +33,8 @@ public class DashboardFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         // 리사이클러뷰에 표시할 데이터 리스트 생성.
-        dashboardModels = new ArrayList<>();
-        dashboardModels.add(new DashboardModel("tv000001",
+        dashboardItems = new ArrayList<>();
+        dashboardItems.add(new DashboardItem("tv000001",
                 "비행기값",
                 800000F,
                 "220307 09:30",
@@ -45,7 +42,7 @@ public class DashboardFragment extends Fragment {
                 "transportation",
                 "won")
         );
-        dashboardModels.add(new DashboardModel("ur000001",
+        dashboardItems.add(new DashboardItem("ur000001",
                 "기념품",
                 300000F,
                 "220108 09:30",
@@ -61,7 +58,7 @@ public class DashboardFragment extends Fragment {
         spend_rv.setLayoutManager(layoutManager);
 
         // 리사이클러뷰에 travelAdapter 객체 지정.
-        spend_adapter = new DashboardAdapter(getActivity(), dashboardModels);
+        spend_adapter = new DashboardAdapter(getActivity(), dashboardItems);
         spend_rv.setAdapter(spend_adapter);
 
     }
