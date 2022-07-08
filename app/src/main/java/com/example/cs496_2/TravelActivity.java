@@ -2,6 +2,7 @@ package com.example.cs496_2;
 
 import android.os.Bundle;
 
+import com.example.cs496_2.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;

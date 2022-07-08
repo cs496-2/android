@@ -46,18 +46,12 @@ public class MainActivity extends AppCompatActivity {
 
 
         // 리사이클러뷰에 LinearLayoutManager 객체 지정.
-        travelRV = findViewById(R.id.idRVtravel);
+        travelRV = findViewById(R.id.rv_travels);
         travelRV.setLayoutManager(new LinearLayoutManager(this));
 
-        // 리사이클러뷰에 SimpleTextAdapter 객체 지정.
+        // 리사이클러뷰에 travelAdapter 객체 지정.
         travelAdapter = new TravelAdapter(this, travelModels);
         travelRV.setAdapter(travelAdapter);
-        travelRV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
 
         // 여행 프로젝트 추가 버튼
         fabAddTravel = findViewById(R.id.fab);

@@ -1,5 +1,6 @@
 package com.example.cs496_2.ui.add;
 
+import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.cs496_2.R;
 import com.example.cs496_2.databinding.FragmentAddBinding;
 
 
@@ -21,15 +23,12 @@ public class AddFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        BlankViewModel addViewModel =
-                new ViewModelProvider(this).get(BlankViewModel.class);
+        return inflater.inflate(R.layout.fragment_add, container, false);
+    }
 
-        binding = FragmentAddBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
-
-        final TextView textView = binding.textAdd;
-        addViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
-        return root;
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
     }
 
     @Override

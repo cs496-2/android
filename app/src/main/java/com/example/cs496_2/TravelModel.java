@@ -12,13 +12,13 @@ public class TravelModel {
     private String currency2;
     private String currency3;
     private Bitmap cover;
-    private int total_spend=0;
-    private int meal_spend;
-    private int shopping_spend;
-    private int tour_spend;
-    private int transportation_spend;
-    private int hotel_spend;
-    private int etc_spend;
+    private double total_spend = 0.0;
+    private Float meal_spend;
+    private Float shopping_spend;
+    private Float tour_spend;
+    private Float transportation_spend;
+    private Float hotel_spend;
+    private Float etc_spend;
 
     // constructor 여행 프로젝트 생성 시 꼭 받아야 하는 정보
     public TravelModel(String name, String country, String start_date, String end_date, String currency1, String currency2) {
@@ -103,7 +103,7 @@ public class TravelModel {
         this.cover = cover;
     }
 
-    public int getTotal_spend() {
+    public double getTotal_spend() {
         return total_spend;
     }
 
@@ -111,51 +111,51 @@ public class TravelModel {
         this.total_spend = total_spend;
     }
 
-    public int getMeal_spend() {
+    public Float getMeal_spend() {
         return meal_spend;
     }
 
-    public void setMeal_spend(int meal_spend) {
+    public void setMeal_spend(Float meal_spend) {
         this.meal_spend = meal_spend;
     }
 
-    public int getShopping_spend() {
+    public Float getShopping_spend() {
         return shopping_spend;
     }
 
-    public void setShopping_spend(int shopping_spend) {
+    public void setShopping_spend(Float shopping_spend) {
         this.shopping_spend = shopping_spend;
     }
 
-    public int getTour_spend() {
+    public Float getTour_spend() {
         return tour_spend;
     }
 
-    public void setTour_spend(int tour_spend) {
+    public void setTour_spend(Float tour_spend) {
         this.tour_spend = tour_spend;
     }
 
-    public int getTransportation_spend() {
+    public Float getTransportation_spend() {
         return transportation_spend;
     }
 
-    public void setTransportation_spend(int transportation_spend) {
+    public void setTransportation_spend(Float transportation_spend) {
         this.transportation_spend = transportation_spend;
     }
 
-    public int getHotel_spend() {
+    public Float getHotel_spend() {
         return hotel_spend;
     }
 
-    public void setHotel_spend(int hotel_spend) {
+    public void setHotel_spend(Float hotel_spend) {
         this.hotel_spend = hotel_spend;
     }
 
-    public int getEtc_spend() {
+    public Float getEtc_spend() {
         return etc_spend;
     }
 
-    public void setEtc_spend(int etc_spend) {
+    public void setEtc_spend(Float etc_spend) {
         this.etc_spend = etc_spend;
     }
 }

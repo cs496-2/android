@@ -26,7 +26,7 @@ public class TravelAdapter extends RecyclerView.Adapter<TravelAdapter.ViewHolder
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_travel, parent, false));
+        return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_travels, parent, false));
     }
 
     // onBindViewHolder() - position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시.
@@ -42,7 +42,7 @@ public class TravelAdapter extends RecyclerView.Adapter<TravelAdapter.ViewHolder
         holder.travel_cover.setImageResource(R.drawable.default_flights);   // 기본 이미지
         holder.travel_name.setText(model.getName());
         holder.travel_date.setText(String.format("%s ~ %s", model.getStart_date(), model.getEnd_date()));
-        holder.travel_total_spend.setText(String.format("₩%d", model.getTotal_spend()));
+        holder.travel_total_spend.setText(new StringBuilder().append("₩").append(model.getTotal_spend()).toString());
 //        holder.travel_flag 국기는 나중에
     }
 
