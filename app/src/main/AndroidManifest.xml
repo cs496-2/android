@@ -10,13 +10,25 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Cs496_2">
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.TravelActivity"
+            android:exported="false"
+            android:label="TravelActivity" />
+        <activity
+            android:name=".LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.cs496_2.MainActivity" />
         </activity>
     </application>
 
