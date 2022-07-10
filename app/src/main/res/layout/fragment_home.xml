@@ -71,6 +71,7 @@
                 android:layout_marginHorizontal="36dp"
                 android:layout_marginTop="36dp"
                 android:text="여행 국가를 선택하세요"
+                android:textSize="16dp"
                 android:textColor="@color/please_fill_in_the_blank" />
 
             <TextView

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class TravelsAdapter extends RecyclerView.Adapter<TravelsAdapter.ViewHolder> {
@@ -34,22 +35,18 @@ public class TravelsAdapter extends RecyclerView.Adapter<TravelsAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         TravelsModel model = travelsModelArrayList.get(position);
-//        if (model == null) {
-//            holder.itemView.setVisibility(View.GONE);
-//            return;
-//        }
         holder.itemView.setVisibility(View.VISIBLE);
-//        holder.travel_cover.setImageBitmap(model.getCover());
         holder.itemView.setOnClickListener(view -> {    // 여행 리사이클러뷰 누르면 해당 여행 프로젝트 열기
             Intent intent = new Intent(context, TravelActivity.class);
-            intent.putExtra("travel_name", model.getName());
+            intent.putExtra("travelId", model.getTravel_id());
             context.startActivity(intent);
         });
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
+        SimpleDateFormat dbDateFormet = new SimpleDateFormat("ddd MMM dd hh:mm:ss yyyy");
         holder.travel_cover.setImageResource(R.drawable.default_flights);   // 기본 이미지
         holder.travel_name.setText(model.getName());
-        holder.travel_date.setText(String.format("%s ~ %s", model.getStart_date(), model.getEnd_date()));
-        holder.travel_total_spend.setText(new StringBuilder().append("₩").append(model.getTotal_spend()).toString());
-//        holder.travel_flag 국기는 나중에
+        holder.travel_date.setText(String.format("%s ~ %s", dateFormat.format(model.getStart_date()), dateFormat.format(model.getEnd_date())));
+        holder.travel_total_spend.setText("₩"+Double.toString(model.getTotal_spend()));
     }
 
     // getItemCount() - 전체 데이터 갯수 리턴.

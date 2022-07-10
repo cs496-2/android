@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -38,7 +39,8 @@ public class HomeFragment extends Fragment {
     private TextView end_date;
     Calendar calendar = Calendar.getInstance();
 
-    private TextView country;
+    private TextView pick_country;
+    private TextView set_currency;
 
     private RecyclerView rv_members;
     private MemberAdapter mAdapter;
@@ -71,7 +73,7 @@ public class HomeFragment extends Fragment {
                 TextView txt_head = dialog_view.findViewById(R.id.tv_dialog_text_input);
                 EditText txt_input = dialog_view.findViewById(R.id.et_dialog_text_input);
                 Button txt_save_btn = dialog_view.findViewById(R.id.btn_dialog_input_save);
-
+                txt_head.setText("여행 이름");
                 txt_save_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -121,7 +123,38 @@ public class HomeFragment extends Fragment {
         });
 
         /*국가 선택*/
-        country = getView().findViewById(R.id.tv_country);
+        pick_country = getView().findViewById(R.id.tv_country);
+        set_currency = getView().findViewById(R.id.tv_currency);
+        pick_country.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.e("HomeFrag", "여행 국가 입력 텍뷰 터치");
+                View dialog_view = getLayoutInflater().inflate(R.layout.dialog_country_picker, null);
+                AlertDialog country_picker_dialog = new AlertDialog.Builder(getActivity())
+                        .setView(dialog_view)
+                        .show();
+
+                TextView country_head = dialog_view.findViewById(R.id.tv_dialog_country);
+                NumberPicker country_picker = dialog_view.findViewById(R.id.np_dialog_country);
+                Button country_select_btn = dialog_view.findViewById(R.id.btn_dialog_country);
+                country_picker.setMinValue(0);
+                country_picker.setMaxValue(9);
+                country_picker.setValue(0);
+                country_picker.setWrapSelectorWheel(false);
+                country_select_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Log.e("Country Picker Dialog", String.valueOf(country_picker.getValue()));
+                        // todo: 국가, 화폐, 환율 json 리스트 생성
+                        // todo: 국가 선택 string list 넣기
+                        pick_country.setText(String.valueOf(country_picker.getValue()));
+                        // todo: 화폐 자동 완성
+                        set_currency.setText("🇺🇸 USD");
+                        country_picker_dialog.dismiss();
+                    }
+                });
+            }
+        });
 
         /*초대 멤버 관리*/
         invited_member_list = new ArrayList<>();
