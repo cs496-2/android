@@ -8,22 +8,19 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.cs496_2.ui.TravelActivity;
-
 import java.util.ArrayList;
 
-public class TravelAdapter extends RecyclerView.Adapter<TravelAdapter.ViewHolder> {
+public class TravelsAdapter extends RecyclerView.Adapter<TravelsAdapter.ViewHolder> {
     private Context context;
-    private ArrayList<TravelModel> travelModelArrayList;
+    private ArrayList<TravelsModel> travelsModelArrayList;
 
     // constructor
-    public TravelAdapter(Context context, ArrayList<TravelModel> travelModelArrayList) {
+    public TravelsAdapter(Context context, ArrayList<TravelsModel> travelsModelArrayList) {
         this.context = context;
-        this.travelModelArrayList = travelModelArrayList;//static?
+        this.travelsModelArrayList = travelsModelArrayList;//static?
     }
 
     // onCreateViewHolder() - 아이템 뷰를 위한 뷰홀더 객체 생성하여 리턴.
@@ -36,7 +33,7 @@ public class TravelAdapter extends RecyclerView.Adapter<TravelAdapter.ViewHolder
     // onBindViewHolder() - position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시.
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        TravelModel model = travelModelArrayList.get(position);
+        TravelsModel model = travelsModelArrayList.get(position);
 //        if (model == null) {
 //            holder.itemView.setVisibility(View.GONE);
 //            return;
@@ -58,7 +55,7 @@ public class TravelAdapter extends RecyclerView.Adapter<TravelAdapter.ViewHolder
     // getItemCount() - 전체 데이터 갯수 리턴.
     @Override
     public int getItemCount() {
-        return travelModelArrayList.size();
+        return travelsModelArrayList.size();
     }
 
     // 아이템 뷰를 저장하는 뷰홀더 클래스.

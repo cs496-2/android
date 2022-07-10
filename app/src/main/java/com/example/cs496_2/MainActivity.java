@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.example.cs496_2.ui.TravelActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -17,8 +16,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     private RecyclerView travelRV;
-    private TravelAdapter travelAdapter;
-    private ArrayList<TravelModel> travelModels;
+    private TravelsAdapter travelsAdapter;
+    private ArrayList<TravelsModel> travelsModels;
     private FloatingActionButton fabAddTravel;
 
     @Override
@@ -27,18 +26,58 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // 리사이클러뷰에 표시할 데이터 리스트 생성.
-        travelModels = new ArrayList<>();
-        travelModels.add(new TravelModel(
-                "대만여행",
+        travelsModels = new ArrayList<>();
+        travelsModels.add(new TravelsModel(
+                "대만",
                 "대만",
                 "220707",
                 "220710",
                 "원화",
                 "신 타이완 달러"
         ));
-         travelModels.add(new TravelModel(
-                "유럽여행",
+         travelsModels.add(new TravelsModel(
                 "독일",
+                "독일",
+                "220707",
+                "220710",
+                "원화",
+                "유로"
+        ));
+         travelsModels.add(new TravelsModel(
+                "영국",
+                "영국",
+                "220707",
+                "220710",
+                "원화",
+                "유로"
+        ));
+         travelsModels.add(new TravelsModel(
+                "프랑스",
+                "프랑스",
+                "220707",
+                "220710",
+                "원화",
+                "유로"
+        ));
+         travelsModels.add(new TravelsModel(
+                "그리스",
+                "그리스",
+                "220707",
+                "220710",
+                "원화",
+                "유로"
+        ));
+         travelsModels.add(new TravelsModel(
+                "이탈리아",
+                "그리스",
+                "220707",
+                "220710",
+                "원화",
+                "유로"
+        ));
+         travelsModels.add(new TravelsModel(
+                "튀르키예",
+                "그리스",
                 "220707",
                 "220710",
                 "원화",
@@ -51,8 +90,8 @@ public class MainActivity extends AppCompatActivity {
         travelRV.setLayoutManager(new LinearLayoutManager(this));
 
         // 리사이클러뷰에 travelAdapter 객체 지정.
-        travelAdapter = new TravelAdapter(this, travelModels);
-        travelRV.setAdapter(travelAdapter);
+        travelsAdapter = new TravelsAdapter(this, travelsModels);
+        travelRV.setAdapter(travelsAdapter);
 
         // 여행 프로젝트 추가 버튼
         fabAddTravel = findViewById(R.id.fab);

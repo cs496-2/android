@@ -2,7 +2,7 @@ package com.example.cs496_2;
 
 import android.graphics.Bitmap;
 
-public class TravelModel {
+public class TravelsModel {
     private String travel_id;
     private String name;
     private String country;
@@ -21,7 +21,7 @@ public class TravelModel {
     private Float etc_spend;
 
     // constructor 여행 프로젝트 생성 시 꼭 받아야 하는 정보
-    public TravelModel(String name, String country, String start_date, String end_date, String currency1, String currency2) {
+    public TravelsModel(String name, String country, String start_date, String end_date, String currency1, String currency2) {
         this.name = name;
         this.country = country;
         this.start_date = start_date;

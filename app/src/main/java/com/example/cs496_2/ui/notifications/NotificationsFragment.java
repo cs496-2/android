@@ -11,8 +11,12 @@ import android.widget.ListView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cs496_2.R;
+import com.example.cs496_2.databinding.FragmentNotificationsBinding;
+import com.example.cs496_2.databinding.ItemAnalysisBinding;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
@@ -29,9 +33,12 @@ public class NotificationsFragment extends Fragment {
 
     private PieChart pieChart;
 
-    private ListView spend_anlz;
-    private List<String> category;
+    private FragmentNotificationsBinding binding;
+    private ItemAnalysisBinding itemBinding;
+    private RecyclerView spend_anlz;
 
+    private List<String> category;
+    private NotificationsAdapter adapter;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -48,7 +55,6 @@ public class NotificationsFragment extends Fragment {
         initPieChart();
         showPieChart();
 
-        spend_anlz = getView().findViewById(R.id.lv_spend_analysis);
         category = new ArrayList<>();
         category.add("총 지출");
         category.add("식비");
@@ -58,6 +64,13 @@ public class NotificationsFragment extends Fragment {
         category.add("숙박");
         category.add("기타");
 
+        //난 오 ㅐ 바인딩을 슬 수 없
+//        binding = FragmentNotificationsBinding.inflate(getLayoutInflater());
+//        binding.rvSpendAnalysis.setLayoutManager(new LinearLayoutManager(getActivity()));
+//        binding.rvSpendAnalysis.setAdapter(new NotificationsAdapter(getActivity(), category));
+        spend_anlz = getView().findViewById(R.id.rv_spend_analysis);
+        spend_anlz.setLayoutManager(new LinearLayoutManager(getActivity()));
+        spend_anlz.setAdapter(new NotificationsAdapter(getActivity(), category));
     }
 
     // function that modify the appearance of the chart
@@ -95,12 +108,12 @@ public class NotificationsFragment extends Fragment {
 
         //initializing data
         Map<String, Integer> typeAmountMap = new HashMap<>();
-        typeAmountMap.put("Toys", 200);
-        typeAmountMap.put("Snacks", 230);
-        typeAmountMap.put("Clothes", 100);
-        typeAmountMap.put("Stationary", 500);
-        typeAmountMap.put("Phone", 50);
-        typeAmountMap.put("Dummy", 120);
+        typeAmountMap.put("식비", 200);
+        typeAmountMap.put("쇼핑", 230);
+        typeAmountMap.put("관광", 100);
+        typeAmountMap.put("교통", 500);
+        typeAmountMap.put("숙박", 50);
+        typeAmountMap.put("기타", 120);
 
         //initializing colors for the entries
         ArrayList<Integer> colors = new ArrayList<>();
