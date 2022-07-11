@@ -11,12 +11,16 @@ import android.view.View;
 
 import com.example.cs496_2.Retrofit.RetrofitAPI;
 import com.example.cs496_2.Retrofit.RetrofitSingleton;
+import com.example.cs496_2.data.DTO.CountryJson;
 import com.example.cs496_2.data.DTO.Travel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.Reader;
 import java.util.ArrayList;
 
 import retrofit2.Call;
@@ -28,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static String user_id = "abepje1";//todo: login 후 userId
     public static RetrofitAPI api;
+    public static ArrayList<CountryJson> countryJsons;
 
     private RecyclerView travelRV;
     private TravelsAdapter travelsAdapter;
@@ -51,6 +56,9 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        // 여행 국가 리스트
+
     }
 
     @Override

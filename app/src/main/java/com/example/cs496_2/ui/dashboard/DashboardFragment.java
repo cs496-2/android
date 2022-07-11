@@ -64,9 +64,10 @@ public class DashboardFragment extends Fragment {
         /*기존 여행 선택 시*/
         RetrofitAPI retrofitAPI = RetrofitSingleton.getRetrofitInstance().create(RetrofitAPI.class);
         Intent intent = getActivity().getIntent();
-        if (intent != null) {
+        String travelId = intent.getStringExtra("travelId");
+        if (travelId != null) {
             Log.e(TAG, "I got travelId! " + intent.getStringExtra("travelId"));
-            Call<JsonObject> travelJson = retrofitAPI.getUserSpends(MainActivity.user_id, intent.getStringExtra("travelId"));
+            Call<JsonObject> travelJson = retrofitAPI.getUserSpends(MainActivity.user_id,travelId );
             travelJson.enqueue(new Callback<JsonObject>() {
                 @Override
                 public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
@@ -84,10 +85,13 @@ public class DashboardFragment extends Fragment {
                                 spend.getSpendAmount(),
                                 spend.getCreatedDate(),
                                 spend.isUseWon(),
-                                spend.getSpendCategory()
+                                spend.getSpendCategory(),
+                                object.has("userSpendId")
                         ));
                     }
-                    spend_rv.setAdapter(new DashboardAdapter(getActivity(), dashboardItems));
+                    DashboardAdapter dashboardAdapter = new DashboardAdapter(getActivity(), dashboardItems);
+                    spend_rv.setAdapter(dashboardAdapter);
+                    Log.e("items", "아이템 개수 "+dashboardAdapter.getItemCount());
                 }
 
                 @Override
@@ -95,7 +99,6 @@ public class DashboardFragment extends Fragment {
                     Log.e(TAG, "retrofit failed");
                 }
             });
-            Log.e("dashboard", String.valueOf(dashboardItems.size()));
 
         }
 

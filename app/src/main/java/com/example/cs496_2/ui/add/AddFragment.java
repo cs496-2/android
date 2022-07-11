@@ -106,7 +106,7 @@ public class AddFragment extends Fragment {
                     currency.setText("FOREIGN");
                     isWon = false;
                 } else {
-                    currency.setText("🇰🇷 WON");
+                    currency.setText("WON");
                     isWon = true;
                 }
             }

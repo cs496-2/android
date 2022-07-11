@@ -4,29 +4,25 @@ import java.util.Date;
 
 public class DashboardItem {
 
+    // spend 공통 사용
     private int id;
     private String spend_name;
     private Float spend_amount;
     private Date created_date;
     private Boolean currency;
     private int category;
+    private boolean isUserSpend;
 
-    // spend 공통 사용
-    public DashboardItem(int id,
-                         String spend_name,
-                         Float spend_amount,
-                         Date created_date,
-                         Boolean currency,
-                         int category) {
+    public DashboardItem(int id, String spend_name, Float spend_amount, Date created_date, Boolean currency, int category, boolean isUserSpend) {
         this.id = id;
         this.spend_name = spend_name;
         this.spend_amount = spend_amount;
         this.created_date = created_date;
         this.currency = currency;
         this.category = category;
+        this.isUserSpend = isUserSpend;
     }
 
-    // getter & setter
     public int getId() {
         return id;
     }
@@ -59,6 +55,14 @@ public class DashboardItem {
         this.created_date = created_date;
     }
 
+    public Boolean getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(Boolean currency) {
+        this.currency = currency;
+    }
+
     public int getCategory() {
         return category;
     }
@@ -67,11 +71,11 @@ public class DashboardItem {
         this.category = category;
     }
 
-    public Boolean getCurrency() {
-        return currency;
+    public boolean isUserSpend() {
+        return isUserSpend;
     }
 
-    public void setCurrency(Boolean currency) {
-        this.currency = currency;
+    public void setUserSpend(boolean userSpend) {
+        isUserSpend = userSpend;
     }
 }

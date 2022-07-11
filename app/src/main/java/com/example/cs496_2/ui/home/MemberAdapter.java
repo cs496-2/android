@@ -1,6 +1,10 @@
 package com.example.cs496_2.ui.home;
 
+import static com.example.cs496_2.MainActivity.user_id;
+import static com.example.cs496_2.TravelActivity.travel_id;
+
 import android.content.Context;
+import android.telecom.Call;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +16,10 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cs496_2.R;
+import com.example.cs496_2.Retrofit.RetrofitAPI;
+import com.example.cs496_2.Retrofit.RetrofitSingleton;
 import com.example.cs496_2.ui.dashboard.DashboardAdapter;
+import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 
@@ -35,7 +42,16 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull MemberAdapter.ViewHolder holder, int position) {
         holder.itemView.setVisibility(View.VISIBLE);
+//        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+//            @Override
+//            public boolean onLongClick(View view) {
+//                RetrofitAPI api = RetrofitSingleton.getRetrofitInstance().create(RetrofitAPI.class);
+//                Call<JsonObject> call = api.deleteUserFromTravel(user_id,travel_id,);
+//                return true;
+//            }
+//        });
         holder.member_invited.setText(stringArrayList.get(position));
+
     }
 
     @Override
@@ -53,10 +69,6 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder
             super(itemView);
             // 뷰 객체에 대한 참조. (hold strong reference)
             member_invited = itemView.findViewById(R.id.tv_invited_member);
-            itemView.setOnLongClickListener(view -> {
-                // TODO: 초대된 멤버 길게 눌러 삭제
-                return false;
-            });
         }
 
         public ViewHolder linkAdapter(MemberAdapter adapter) {
