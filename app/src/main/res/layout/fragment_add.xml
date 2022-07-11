@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.add.AddFragment">
+
+    <LinearLayout
+        android:id="@+id/ly_date_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tv_spend_create_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="4dp"
+            android:onClick="showTimePickerDialog"
+            android:text="2022년 7월 9일" />
+
+        <TextView
+            android:id="@+id/tv_spend_create_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="4dp"
+            android:onClick="showTimePickerDialog"
+            android:text="09:30" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_show_currency"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="8dp"
+        android:text="🇰🇷 WON"
+        android:textColor="@color/black"
+        android:textSize="@dimen/title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/editTextNumberSigned" />
+
+    <EditText
+        android:id="@+id/editTextNumberSigned"
+        android:layout_width="150dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="28dp"
+        android:ems="10"
+        android:gravity="right"
+        android:hint="0"
+        android:inputType="numberSigned"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ly_date_time" />
+
+    <RadioGroup
+        android:id="@+id/rg_spend_category_group"
+        android:layout_width="350dp"
+        android:layout_height="68dp"
+        android:layout_marginTop="32dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextNumberSigned">
+
+        <RadioButton
+            android:id="@+id/rb_category1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/selector_radio_button"
+            android:button="@null"
+            android:text="식비"
+            android:textAlignment="center"
+            android:textColor="@drawable/selector_radio_text" />
+
+        <RadioButton
+            android:id="@+id/rb_category2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/selector_radio_button"
+            android:button="@null"
+            android:text="쇼핑"
+            android:textAlignment="center"
+            android:textColor="@drawable/selector_radio_text" />
+
+        <RadioButton
+            android:id="@+id/rb_category3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/selector_radio_button"
+            android:button="@null"
+            android:text="관광"
+            android:textAlignment="center"
+            android:textColor="@drawable/selector_radio_text" />
+
+        <RadioButton
+            android:id="@+id/rb_category4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/selector_radio_button"
+            android:button="@null"
+            android:text="교통"
+            android:textAlignment="center"
+            android:textColor="@drawable/selector_radio_text" />
+
+        <RadioButton
+            android:id="@+id/rb_category5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/selector_radio_button"
+            android:button="@null"
+            android:text="숙박"
+            android:textAlignment="center"
+            android:textColor="@drawable/selector_radio_text" />
+
+        <RadioButton
+            android:id="@+id/rb_category6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/selector_radio_button"
+            android:button="@null"
+            android:text="기타"
+            android:textAlignment="center"
+            android:textColor="@drawable/selector_radio_text" />
+
+    </RadioGroup>
+
+    <RadioGroup
+        android:id="@+id/rg_spend_group_or_personal"
+        android:layout_width="350dp"
+        android:layout_height="68dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rg_spend_category_group">
+
+        <RadioButton
+            android:id="@+id/rb_spend_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/selector_radio_button"
+            android:button="@null"
+            android:text="공동 지출"
+            android:textAlignment="center"
+            android:textColor="@drawable/selector_radio_text" />
+
+        <RadioButton
+            android:id="@+id/rb_spend_personal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/selector_radio_button"
+            android:button="@null"
+            android:text="개인 지출"
+            android:textAlignment="center"
+            android:textColor="@drawable/selector_radio_text" />
+    </RadioGroup>
+
+    <EditText
+        android:id="@+id/et_spend_name"
+        android:layout_width="350dp"
+        android:layout_height="48dp"
+        android:ems="10"
+        android:hint="지출 내역"
+        android:inputType="textPersonName"
+        android:minHeight="48dp"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rg_spend_group_or_personal" />
+
+    <Button
+        android:id="@+id/btn_spend_save"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:text="저장"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.508"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_spend_name" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

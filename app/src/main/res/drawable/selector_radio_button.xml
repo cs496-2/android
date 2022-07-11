@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--<selector xmlns:android="http://schemas.android.com/apk/res/android">-->
+<!--&lt;!&ndash;-->
+<!--라디오버튼이 체크되었을 때(state_checked = "true")와 해제되었을때(state_checked="false")의 버튼 색상/테두리 설정-->
+<!--만약 이미지를 적용하고 싶다면, <shape> 항목 대신 <item android:drawable="@drawable/이미지경로">를 사용하면 된다.-->
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<selector xmlns:android="http://schemas.android.com/apk/res/android">-->
+
+<!--    <item android:state_checked="true" android:drawable="@drawable/체크상태이미지" />-->
+<!--    <item android:state_checked="false" android:drawable="@drawable/체크해제이미지" />-->
+
+<!--</selector>-->
+<!--&ndash;&gt;-->
+<!--    <item android:state_checked="true">-->
+<!--        <shape android:shape="rectangle">-->
+<!--            <solid android:color="#000000" />-->
+<!--            <stroke android:width="1dp" android:color="#000000" />-->
+<!--        </shape>-->
+<!--    </item>-->
+<!--    <item android:state_checked="false">-->
+<!--        <shape android:shape="rectangle">-->
+<!--            <solid android:color="#FFFFFF" />-->
+<!--            <stroke android:width="1dp" android:color="#000000" />-->
+<!--        </shape>-->
+<!--    </item>-->
+<!--</selector>-->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:state_checked="true" android:drawable="@drawable/layer_button_checked" />
+    <item android:state_checked="false" android:drawable="@drawable/layer_button_unchecked" />
+
+</selector>
