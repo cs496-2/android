@@ -1,32 +1,37 @@
 package com.example.cs496_2.ui.dashboard;
 
+import java.util.Date;
+
 public class DashboardItem {
 
-    private String id;
+    private int id;
     private String spend_name;
     private Float spend_amount;
-    private String spend_date;
-    private String consume_date;
-    private String category;
-    private String currency;
+    private Date created_date;
+    private Boolean currency;
+    private int category;
 
     // spend 공통 사용
-    public DashboardItem(String id, String spend_name, Float spend_amount, String spend_date, String consume_date, String category, String currency) {
+    public DashboardItem(int id,
+                         String spend_name,
+                         Float spend_amount,
+                         Date created_date,
+                         Boolean currency,
+                         int category) {
         this.id = id;
         this.spend_name = spend_name;
         this.spend_amount = spend_amount;
-        this.spend_date = spend_date;
-        this.consume_date = consume_date;
-        this.category = category;
+        this.created_date = created_date;
         this.currency = currency;
+        this.category = category;
     }
 
     // getter & setter
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -46,35 +51,27 @@ public class DashboardItem {
         this.spend_amount = spend_amount;
     }
 
-    public String getSpend_date() {
-        return spend_date;
+    public Date getCreated_date() {
+        return created_date;
     }
 
-    public void setSpend_date(String spend_date) {
-        this.spend_date = spend_date;
+    public void setCreated_date(Date created_date) {
+        this.created_date = created_date;
     }
 
-    public String getConsume_date() {
-        return consume_date;
-    }
-
-    public void setConsume_date(String consume_date) {
-        this.consume_date = consume_date;
-    }
-
-    public String getCategory() {
+    public int getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(int category) {
         this.category = category;
     }
 
-    public String getCurrency() {
+    public Boolean getCurrency() {
         return currency;
     }
 
-    public void setCurrency(String currency) {
+    public void setCurrency(Boolean currency) {
         this.currency = currency;
     }
 }

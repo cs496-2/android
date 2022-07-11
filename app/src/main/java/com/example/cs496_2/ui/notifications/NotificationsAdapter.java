@@ -13,16 +13,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.cs496_2.R;
 import com.example.cs496_2.ui.dashboard.DashboardAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdapter.ViewHolder>{
 
     private Context context;
-    private List<String> category;
+    private ArrayList<NotificationsItem> notificationsItemArrayList;
 
-    public NotificationsAdapter(Context context, List<String> category) {
+    public NotificationsAdapter(Context context, ArrayList<NotificationsItem> notificationsItemArrayList) {
         this.context = context;
-        this.category = category;
+        this.notificationsItemArrayList = notificationsItemArrayList;
     }
 
     @NonNull
@@ -33,15 +34,16 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
 
     @Override
     public void onBindViewHolder(@NonNull NotificationsAdapter.ViewHolder holder, int position) {
-        String str = category.get(position);
+        NotificationsItem item = notificationsItemArrayList.get(position);
         holder.itemView.setVisibility(View.VISIBLE);
 
-        holder.anlz_category_text.setText(str);
+        holder.anlz_category_text.setText(item.getCategory());
+        holder.anlz_amount.setText("₩"+Math.round(item.getSpend()));
     }
 
     @Override
     public int getItemCount() {
-        return category.size();
+        return notificationsItemArrayList.size();
     }
 
     // 아이템 뷰를 저장하는 뷰홀더 클래스.

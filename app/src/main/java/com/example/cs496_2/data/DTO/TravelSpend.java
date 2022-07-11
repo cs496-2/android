@@ -7,11 +7,11 @@ public class TravelSpend {
     public int travelSpendId;
     public String spendName;
     public Date createdDate;
-    public int spendAmount;
+    public Float spendAmount;
     public boolean useWon;
     public int spendCategory;
 
-    public TravelSpend(int travelSpendId, String spendName, Date createdDate, int spendAmount, boolean useWon, int spendCategory) {
+    public TravelSpend(int travelSpendId, String spendName, Date createdDate, Float spendAmount, boolean useWon, int spendCategory) {
         this.travelSpendId = travelSpendId;
         this.spendName = spendName;
         this.createdDate = createdDate;
@@ -44,11 +44,11 @@ public class TravelSpend {
         this.createdDate = createdDate;
     }
 
-    public int getSpendAmount() {
+    public Float getSpendAmount() {
         return spendAmount;
     }
 
-    public void setSpendAmount(int spendAmount) {
+    public void setSpendAmount(Float spendAmount) {
         this.spendAmount = spendAmount;
     }
 

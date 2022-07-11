@@ -1,12 +1,12 @@
 package com.example.cs496_2.ui.notifications;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,7 +14,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.cs496_2.MainActivity;
 import com.example.cs496_2.R;
+import com.example.cs496_2.Retrofit.RetrofitAPI;
+import com.example.cs496_2.Retrofit.RetrofitSingleton;
 import com.example.cs496_2.databinding.FragmentNotificationsBinding;
 import com.example.cs496_2.databinding.ItemAnalysisBinding;
 import com.github.mikephil.charting.animation.Easing;
@@ -23,22 +26,27 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class NotificationsFragment extends Fragment {
+    private final String TAG = "-NotificationsFragment";
 
     private PieChart pieChart;
 
-    private FragmentNotificationsBinding binding;
-    private ItemAnalysisBinding itemBinding;
-    private RecyclerView spend_anlz;
-
-    private List<String> category;
-    private NotificationsAdapter adapter;
+    private ArrayList<String> category_kr;
+    private ArrayList<String> category_en_travel;
+    private ArrayList<String> category_en_user;
+    private RecyclerView spend_anlz_rv;
+    private ArrayList<NotificationsItem> notificationsItemArrayList;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -50,27 +58,52 @@ public class NotificationsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        category_kr = new ArrayList<>(Arrays.asList("총 지출", "식비", "쇼핑", "관광", "교통", "숙박", "기타"));
+        category_en_travel = new ArrayList<>(Arrays.asList("totalSpend", "mealSpend", "shopSpend", "tourSpend", "transportSpend", "hotelSpend", "etcSpend"));
+        category_en_user = new ArrayList<>(Arrays.asList("personalTotalSpend", "personalMealSpend", "personalShopSpend", "personalTourSpend", "personalTransportSpend", "personalHotelSpend", "personalEtcSpend"));
 
-        pieChart = (PieChart) getView().findViewById(R.id.pie_chart);
-        initPieChart();
-        showPieChart();
+        notificationsItemArrayList = new ArrayList<>();
 
-        category = new ArrayList<>();
-        category.add("총 지출");
-        category.add("식비");
-        category.add("쇼핑");
-        category.add("관광");
-        category.add("교통");
-        category.add("숙박");
-        category.add("기타");
+        /*기존 여행 선택 시*/
+        RetrofitAPI retrofitAPI = RetrofitSingleton.getRetrofitInstance().create(RetrofitAPI.class);
+        Intent intent = getActivity().getIntent();
+        if (intent != null) {
+            Log.e(TAG, "I got travelId! " + intent.getStringExtra("travelId"));
+            Call<JsonObject> travelJson = retrofitAPI.getTravelStat(MainActivity.user_id, intent.getStringExtra("travelId"));
+            travelJson.enqueue(new Callback<JsonObject>() {
+                @Override
+                public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                    Log.e(TAG, "retrofit success");
+                    JsonObject body = response.body();
+                    JsonObject data = body.getAsJsonObject("data");
+                    JsonObject travelForStat = data.getAsJsonObject("travelForStat");
+                    Log.e(TAG, "travelForStat : " + travelForStat);
+                    JsonObject travelUserPairForStat = data.getAsJsonObject("travelUserPairForStat");
+                    Log.e(TAG, "travelUserPairForStat: " + travelUserPairForStat);
+                    for (int i = 0; i < category_kr.size(); i++) {
+                        notificationsItemArrayList.add(new NotificationsItem(
+                                category_kr.get(i),
+                                travelForStat.get(category_en_travel.get(i)).getAsFloat()
+                                        + travelUserPairForStat.get(category_en_user.get(i)).getAsFloat()
+                        ));
+                    }
+                    spend_anlz_rv.setAdapter(new NotificationsAdapter(getActivity(), notificationsItemArrayList));
 
-        //난 오 ㅐ 바인딩을 슬 수 없
-//        binding = FragmentNotificationsBinding.inflate(getLayoutInflater());
-//        binding.rvSpendAnalysis.setLayoutManager(new LinearLayoutManager(getActivity()));
-//        binding.rvSpendAnalysis.setAdapter(new NotificationsAdapter(getActivity(), category));
-        spend_anlz = getView().findViewById(R.id.rv_spend_analysis);
-        spend_anlz.setLayoutManager(new LinearLayoutManager(getActivity()));
-        spend_anlz.setAdapter(new NotificationsAdapter(getActivity(), category));
+                    pieChart = (PieChart) getView().findViewById(R.id.pie_chart);
+                    initPieChart();
+                    showPieChart();
+                }
+
+                @Override
+                public void onFailure(Call<JsonObject> call, Throwable t) {
+                    Log.e(TAG, "retrofit failed");
+                }
+            });
+        }
+
+        spend_anlz_rv = getView().findViewById(R.id.rv_spend_analysis);
+        spend_anlz_rv.setLayoutManager(new LinearLayoutManager(getActivity()));
+        spend_anlz_rv.setAdapter(new NotificationsAdapter(getActivity(), notificationsItemArrayList));
     }
 
     // function that modify the appearance of the chart
@@ -108,12 +141,13 @@ public class NotificationsFragment extends Fragment {
 
         //initializing data
         Map<String, Integer> typeAmountMap = new HashMap<>();
-        typeAmountMap.put("식비", 200);
-        typeAmountMap.put("쇼핑", 230);
-        typeAmountMap.put("관광", 100);
-        typeAmountMap.put("교통", 500);
-        typeAmountMap.put("숙박", 50);
-        typeAmountMap.put("기타", 120);
+        Log.e(TAG, "category_kr : " + category_kr);
+        Log.e(TAG, "notificationsItemArrayList : " + notificationsItemArrayList);
+        for (int i = 1; i < category_kr.size(); i++) {
+            if (Math.round(notificationsItemArrayList.get(i).getSpend()) != 0) {
+                typeAmountMap.put(category_kr.get(i), Math.round(notificationsItemArrayList.get(i).getSpend()));
+            }
+        }
 
         //initializing colors for the entries
         ArrayList<Integer> colors = new ArrayList<>();

@@ -36,5 +36,7 @@ public interface RetrofitAPI {
                                   @Field("coverImg") String coverImg,
                                   @Field("token") String token);
 
+    @GET("/user/{userId}/{travelId}/stats")
+    Call<JsonObject> getTravelStat(@Path("userId") String userId, @Path("travelId") String travelId);
 
 }

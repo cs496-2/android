@@ -24,6 +24,10 @@ public class Travel {
     public ArrayList<UserSpend> userSpends = null;
     public ArrayList<TravelUserPair> travelUserPairs = null;
 
+    public Travel(String travelId) {
+        this.travelId = travelId;
+    }
+
     public Travel(String travelId,
                   String travelName,
                   String travelCountry,

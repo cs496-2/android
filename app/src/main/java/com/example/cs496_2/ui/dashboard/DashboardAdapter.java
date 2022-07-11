@@ -12,12 +12,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cs496_2.R;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.ViewHolder> {
 
     private Context context;
     private ArrayList<DashboardItem> dashboardItemArrayList;
+
+    private static final String USER_FORMAT = "yyyy.MM.dd";
+
 
     public DashboardAdapter(Context context, ArrayList<DashboardItem> dashboardItemArrayList) {
         this.context = context;
@@ -44,7 +48,9 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.View
 //        });
         holder.spend_name.setText(model.getSpend_name());
         holder.spend_money.setText(String.format("₩%s", model.getSpend_amount()));
-        holder.spend_date_time.setText(model.getSpend_date());
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat(USER_FORMAT);
+        holder.spend_date_time.setText(dateFormat.format(model.getCreated_date()));
     }
 
     // getItemCount() - 전체 데이터 갯수 리턴.

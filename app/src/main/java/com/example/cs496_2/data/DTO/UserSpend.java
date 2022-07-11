@@ -7,11 +7,11 @@ public class UserSpend {
     public int userSpendId;
     public String spendName;
     public Date createdDate;
-    public int spendAmount;
+    public Float spendAmount;
     public boolean useWon;
     public int spendCategory;
 
-    public UserSpend(int userSpendId, String spendName, Date createdDate, int spendAmount, boolean useWon, int spendCategory) {
+    public UserSpend(int userSpendId, String spendName, Date createdDate, Float spendAmount, boolean useWon, int spendCategory) {
         this.userSpendId = userSpendId;
         this.spendName = spendName;
         this.createdDate = createdDate;
@@ -44,11 +44,11 @@ public class UserSpend {
         this.createdDate = createdDate;
     }
 
-    public int getSpendAmount() {
+    public Float getSpendAmount() {
         return spendAmount;
     }
 
-    public void setSpendAmount(int spendAmount) {
+    public void setSpendAmount(Float spendAmount) {
         this.spendAmount = spendAmount;
     }
 

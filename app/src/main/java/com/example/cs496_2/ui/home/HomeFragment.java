@@ -237,6 +237,12 @@ public class HomeFragment extends Fragment {
                         invited_member_list.add(element.getAsString());
                         rv_members.setAdapter(new MemberAdapter(getActivity(), invited_member_list));
                     }
+
+                    Glide.with(HomeFragment.this)
+                            .load("http://192.249.21.206:3000/src/images/933374-viewom.jpg")
+                            .error(R.drawable.ic_baseline_clear_24)
+                            .centerCrop()
+                            .into(travel_cover);
                 }
 
                 @Override
@@ -296,6 +302,7 @@ public class HomeFragment extends Fragment {
             if (imagePath.length() > 0) {
                 Glide.with(this)
                         .load(imagePath)
+                        .error(R.drawable.ic_baseline_clear_24)
                         .centerCrop()
                         .into(travel_cover);
             }
