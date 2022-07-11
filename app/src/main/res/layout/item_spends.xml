@@ -46,4 +46,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.261" />
+
+    <TextView
+        android:id="@+id/tv_spend_personal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:text="지출 분류"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/tv_spend_date_time"
+        app:layout_constraintTop_toBottomOf="@+id/tv_spend_date_time" />
 </androidx.constraintlayout.widget.ConstraintLayout>

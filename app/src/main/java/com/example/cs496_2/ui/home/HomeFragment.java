@@ -1,5 +1,8 @@
 package com.example.cs496_2.ui.home;
 
+import static com.example.cs496_2.MainActivity.user_id;
+import static com.example.cs496_2.TravelActivity.travel_id;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -27,12 +30,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.cs496_2.MainActivity;
 import com.example.cs496_2.R;
 import com.example.cs496_2.Retrofit.RetrofitAPI;
 import com.example.cs496_2.Retrofit.RetrofitSingleton;
-import com.example.cs496_2.data.DTO.BodyToken;
+import com.example.cs496_2.data.DTO.PostNewTravel;
 import com.example.cs496_2.data.DTO.Travel;
+import com.example.cs496_2.data.DTO.UpdateTravel;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -41,8 +44,6 @@ import com.google.gson.JsonObject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.regex.Pattern;
 
 import retrofit2.Call;
@@ -52,8 +53,6 @@ import retrofit2.Response;
 public class HomeFragment extends Fragment {
     private String TAG = "--------------HomeFragment";
 
-    private String user_id;
-    private int travel_id;
     private TextView travel_name;
 
     private TextView start_date;
@@ -78,6 +77,7 @@ public class HomeFragment extends Fragment {
 
     private static final String DB_FORMAT = "";
     private static final String USER_FORMAT = "yyyy년 MM월 dd일";
+    private String token="oooo";
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -125,7 +125,7 @@ public class HomeFragment extends Fragment {
         DatePickerDialog startDatePicker = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                start_date.setText(i + "년 " + (i1 + 1) + "월 " + i2 + "일");
+                start_date.setText(i + "-" + (i1 + 1) + "-" + i2 );
                 start_date.setBackground(null);
             }
         }, start_year, start_month, start_day);
@@ -144,7 +144,7 @@ public class HomeFragment extends Fragment {
         DatePickerDialog endDatePicker = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                end_date.setText(i + "년 " + (i1 + 1) + "월 " + i2 + "일");
+                end_date.setText(i + "-" + (i1 + 1) + "-" + i2 );
                 end_date.setBackground(null);
             }
         }, end_year, end_month, end_day);
@@ -209,8 +209,9 @@ public class HomeFragment extends Fragment {
                 txt_save_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        BodyToken bodyToken = new BodyToken("0000");
-                        Call<JsonObject> jsonObjectCall = retrofitAPI.joinNewUserToTravel(user_id, String.valueOf(travel_id), txt_input.getText().toString(), bodyToken);
+                        JsonObject token = new JsonObject();
+                        token.addProperty("token","oooo");
+                        Call<JsonObject> jsonObjectCall = retrofitAPI.joinNewUserToTravel(user_id, String.valueOf(travel_id), txt_input.getText().toString(), token);
                         jsonObjectCall.enqueue(new Callback<JsonObject>() {
                             @Override
                             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
@@ -256,7 +257,7 @@ public class HomeFragment extends Fragment {
         SimpleDateFormat dateFormat = new SimpleDateFormat(USER_FORMAT);
         if (intent != null) {
             Log.e(TAG, "I got travelId! " + intent.getStringExtra("travelId"));
-            Call<JsonObject> travelJson = retrofitAPI.getTravelProject(MainActivity.user_id, intent.getStringExtra("travelId"));
+            Call<JsonObject> travelJson = retrofitAPI.getTravelProject(user_id, intent.getStringExtra("travelId"));
             travelJson.enqueue(new Callback<JsonObject>() {
                 @Override
                 public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
@@ -285,6 +286,7 @@ public class HomeFragment extends Fragment {
                         rv_members.setAdapter(new MemberAdapter(getActivity(), invited_member_list));
                     }
 
+                    //이미지 로드
 //                    Glide.with(HomeFragment.this)
 //                            .load("http://192.249.21.206:3000/src/images/933374-viewom.jpg")
 //                            .error(R.drawable.ic_baseline_clear_24)
@@ -304,10 +306,28 @@ public class HomeFragment extends Fragment {
         travel_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Map<String, String> map = new HashMap<>();
-                map.put("userId", user_id);
 
-                Call<JsonObject> jsonObjectCall = retrofitAPI.deleteTravel(user_id, travel_id, map);
+                UpdateTravel updateTravel = new UpdateTravel(
+                        travel_name.toString(),
+                        pick_country.toString(),
+                        start_date.toString(),
+                        end_date.toString(),
+                        set_currency.toString(),
+                        "none",
+                        token
+                );
+
+                Call<JsonObject> jsonObjectCall = retrofitAPI.deleteTravel(user_id, travel_id, updateTravel);
+                jsonObjectCall.enqueue(new Callback<JsonObject>() {
+                    @Override
+                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                        Log.e(TAG, "여행 삭제 success");
+                    }
+                    @Override
+                    public void onFailure(Call<JsonObject> call, Throwable t) {
+                        Log.e(TAG, "여행 삭제 failed");
+                    }
+                });
                 getActivity().finish();
             }
         });
@@ -318,26 +338,51 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onClick(View view) {
-                Log.e(TAG, "btn_travel_update");
-                Call<JsonObject> jsonObjectCall = retrofitAPI.updateTravel(user_id, travel_id,
-                        travel_name.toString(),
-                        pick_country.toString(),
-                        start_date.toString(),
-                        end_date.toString(),
-                        set_currency.toString(),
-                        null,
-                        "ooh");
-                jsonObjectCall.enqueue(new Callback<JsonObject>() {
-                    @Override
-                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                        Log.e(TAG, "success");
-                    }
-
-                    @Override
-                    public void onFailure(Call<JsonObject> call, Throwable t) {
-                        Log.e(TAG, "failed");
-                    }
-                });
+                if (intent != null) {//기존 정보 있음 -> 업데이트
+                    Log.e(TAG, "btn_travel_update");
+                    UpdateTravel updateTravel = new UpdateTravel(
+                            travel_name.toString(),
+                            pick_country.toString(),
+                            start_date.toString(),
+                            end_date.toString(),
+                            set_currency.toString(),
+                            null,
+                            token
+                    );
+                    Call<JsonObject> jsonObjectCall = retrofitAPI.updateTravel(user_id, travel_id, updateTravel);
+                    jsonObjectCall.enqueue(new Callback<JsonObject>() {
+                        @Override
+                        public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                            Log.e(TAG, "여행 수정 success");
+                        }
+                        @Override
+                        public void onFailure(Call<JsonObject> call, Throwable t) {
+                            Log.e(TAG, "여행 수정 failed");
+                        }
+                    });
+                } else {//기존 정보 없음 -> 새로 POST
+                    PostNewTravel postNewTravel = new PostNewTravel(
+                            travel_name.toString(),
+                            pick_country.toString(),
+                            start_date.toString(),
+                            end_date.toString(),
+                            set_currency.toString(),
+                            "none",
+                            90.0F,
+                            token
+                    );
+                    Call<JsonObject> jsonObjectCall = retrofitAPI.postNewTravel(user_id, travel_id, postNewTravel);
+                    jsonObjectCall.enqueue(new Callback<JsonObject>() {
+                        @Override
+                        public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                            Log.e(TAG, "여행 생성 success");
+                        }
+                        @Override
+                        public void onFailure(Call<JsonObject> call, Throwable t) {
+                            Log.e(TAG, "여행 생성 failed");
+                        }
+                    });
+                }
 
                 // activity reload
                 getActivity().finish();

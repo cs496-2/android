@@ -1,21 +1,26 @@
 package com.example.cs496_2.data.DTO;
 
-public class UpdateTravelBody {
-    public String travelName;
-    public String travelCountry;
-    public String startDate;
-    public String endDate;
-    public String foreignCurrency;
-    public String coverImg;
-    public String token;
+import java.util.Arrays;
+import java.util.Date;
 
-    public UpdateTravelBody(String travelName, String travelCountry, String startDate, String endDate, String foreignCurrency, String coverImg, String token) {
+public class PostNewTravel {
+    private String travelName;
+    private String travelCountry;
+    private String startDate;
+    private String endDate;
+    private String foreignCurrency;
+    private String coverImg;
+    private Float exchangeRate;
+    private String token;
+
+    public PostNewTravel(String travelName, String travelCountry, String startDate, String endDate, String foreignCurrency, String coverImg, Float exchangeRate, String token) {
         this.travelName = travelName;
         this.travelCountry = travelCountry;
         this.startDate = startDate;
         this.endDate = endDate;
         this.foreignCurrency = foreignCurrency;
         this.coverImg = coverImg;
+        this.exchangeRate = exchangeRate;
         this.token = token;
     }
 
@@ -67,6 +72,14 @@ public class UpdateTravelBody {
         this.coverImg = coverImg;
     }
 
+    public Float getExchangeRate() {
+        return exchangeRate;
+    }
+
+    public void setExchangeRate(Float exchangeRate) {
+        this.exchangeRate = exchangeRate;
+    }
+
     public String getToken() {
         return token;
     }
@@ -74,4 +87,19 @@ public class UpdateTravelBody {
     public void setToken(String token) {
         this.token = token;
     }
+
+    @Override
+    public String toString() {
+        return "PostNewTravel{" +
+                "travelName='" + travelName + '\'' +
+                ", travelCountry='" + travelCountry + '\'' +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", foreignCurrency='" + foreignCurrency + '\'' +
+                ", coverImg=" +coverImg +
+                ", exchangeRate=" + exchangeRate +
+                ", token='" + token + '\'' +
+                '}';
+    }
 }
+

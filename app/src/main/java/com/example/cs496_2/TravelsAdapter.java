@@ -42,11 +42,11 @@ public class TravelsAdapter extends RecyclerView.Adapter<TravelsAdapter.ViewHold
             context.startActivity(intent);
         });
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
-        SimpleDateFormat dbDateFormet = new SimpleDateFormat("ddd MMM dd hh:mm:ss yyyy");
+        SimpleDateFormat dbDateFormat = new SimpleDateFormat("ddd MMM dd hh:mm:ss yyyy");
         holder.travel_cover.setImageResource(R.drawable.default_flights);   // 기본 이미지
         holder.travel_name.setText(model.getName());
         holder.travel_date.setText(String.format("%s ~ %s", dateFormat.format(model.getStart_date()), dateFormat.format(model.getEnd_date())));
-        holder.travel_total_spend.setText("₩"+Double.toString(model.getTotal_spend()));
+        holder.travel_total_spend.setText("₩"+ model.getTotal_spend());
     }
 
     // getItemCount() - 전체 데이터 갯수 리턴.

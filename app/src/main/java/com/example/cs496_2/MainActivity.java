@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private final String TAG = "----------MainActivity";
 
     public static String user_id = "abepje1";//todo: login 후 userId
+    public static RetrofitAPI api;
 
     private RecyclerView travelRV;
     private TravelsAdapter travelsAdapter;
@@ -48,10 +49,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
     @Override
     protected void onResume() {
         super.onResume();
-
+        /**
+         * 여행 목록 가져오기 ok
+         * */
         RetrofitAPI retrofitAPI = RetrofitSingleton.getRetrofitInstance().create(RetrofitAPI.class);
         Call<JsonObject> travelJson = retrofitAPI.getAllTravels("abepje1");
         travelJson.enqueue(new Callback<JsonObject>() {
@@ -65,12 +69,11 @@ public class MainActivity extends AppCompatActivity {
                 Log.e(TAG, String.valueOf(dataArr));
                 // 리사이클러뷰에 표시할 데이터 리스트 생성.
                 travelsModels = new ArrayList<>();
-                for(int i = 0; i< dataArr.size();i++){
+                for (int i = 0; i < dataArr.size(); i++) {
                     JsonObject travelItem = dataArr.get(i).getAsJsonObject();
                     Travel travel = new Gson().fromJson(travelItem, Travel.class);
                     travels.add(travel);
-                    Log.e(TAG, i+" ::"+travels.get(i).toString());
-
+                    Log.e(TAG, i + " ::" + travels.get(i).toString());
                     travelsModels.add(new TravelsModel(
                             travel.getTravelId(),
                             travel.getTravelName(),

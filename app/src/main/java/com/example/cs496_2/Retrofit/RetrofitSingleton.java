@@ -1,7 +1,11 @@
 package com.example.cs496_2.Retrofit;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class RetrofitSingleton {
 
@@ -12,13 +16,17 @@ public class RetrofitSingleton {
 
     public static Retrofit getRetrofitInstance() {
         if (retrofit == null) {
+            Gson gson = new GsonBuilder().setDateFormat("yyyy.MM.dd HH:mm:ss").create();
+            GsonConverterFactory factory = GsonConverterFactory.create(gson);
             retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create())
+                    .addConverterFactory(ScalarsConverterFactory.create())
+                    .addConverterFactory(factory)
                     .build();
         }
         return retrofit;
     }
+
 
     public static RetrofitAPI getRetrofitAPI() {
         return retrofitAPI;
