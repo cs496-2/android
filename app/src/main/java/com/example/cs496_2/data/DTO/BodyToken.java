@@ -1,9 +1,9 @@
 package com.example.cs496_2.data.DTO;
 
-public class GetBodyToken {
+public class BodyToken {
     String token;
 
-    public GetBodyToken(String token) {
+    public BodyToken(String token) {
         this.token = token;
     }
 

@@ -1,7 +1,6 @@
 package com.example.cs496_2;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,7 +12,6 @@ import android.view.View;
 import com.example.cs496_2.Retrofit.RetrofitAPI;
 import com.example.cs496_2.Retrofit.RetrofitSingleton;
 import com.example.cs496_2.data.DTO.Travel;
-import com.example.cs496_2.data.TravelViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -54,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        /*TODO: RETROFIT USE JSON DATA*/
         RetrofitAPI retrofitAPI = RetrofitSingleton.getRetrofitInstance().create(RetrofitAPI.class);
         Call<JsonObject> travelJson = retrofitAPI.getAllTravels("abepje1");
         travelJson.enqueue(new Callback<JsonObject>() {

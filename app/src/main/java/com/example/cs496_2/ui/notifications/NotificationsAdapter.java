@@ -49,6 +49,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
     public class ViewHolder extends RecyclerView.ViewHolder {
 
+        //todo:: 이미지뷰에 카테고리 별 아이콘 넣기
         ImageView anlz_category_image;
         TextView anlz_category_text;
         TextView anlz_amount;

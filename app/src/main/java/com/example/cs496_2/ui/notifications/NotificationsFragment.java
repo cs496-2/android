@@ -128,7 +128,7 @@ public class NotificationsFragment extends Fragment {
         pieChart.animateY(1400, Easing.EaseInOutCubic);
         //setting the color of the hole in the middle, default white
         pieChart.setDrawHoleEnabled(false);
-        pieChart.setHoleColor(Color.WHITE);
+        pieChart.setHoleColor(Color.parseColor("#303030"));
         pieChart.setTransparentCircleRadius(61f);
 
     }

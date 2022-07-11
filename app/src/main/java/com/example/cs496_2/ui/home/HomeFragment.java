@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,22 +31,19 @@ import com.example.cs496_2.MainActivity;
 import com.example.cs496_2.R;
 import com.example.cs496_2.Retrofit.RetrofitAPI;
 import com.example.cs496_2.Retrofit.RetrofitSingleton;
-import com.example.cs496_2.TravelActivity;
+import com.example.cs496_2.data.DTO.BodyToken;
 import com.example.cs496_2.data.DTO.Travel;
-import com.example.cs496_2.data.DTO.TravelUserPair;
-import com.example.cs496_2.data.DTO.UserSpend;
-import com.example.cs496_2.data.TravelViewModel;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Pattern;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -68,6 +66,7 @@ public class HomeFragment extends Fragment {
 
     private RecyclerView rv_members;
 
+    private TextView invite_member;
     private ArrayList<String> invited_member_list;
 
     private ImageView travel_cover;
@@ -89,6 +88,8 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Log.e(TAG, "onViewCreated");
+        RetrofitAPI retrofitAPI = RetrofitSingleton.getRetrofitInstance().create(RetrofitAPI.class);
+
         /*여행 제목*/
         travel_name = getView().findViewById(R.id.tv_travel_name);
         travel_name.setOnClickListener(new View.OnClickListener() {
@@ -188,6 +189,53 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        /*todo:멤버 초대*/
+        invite_member = getView().findViewById(R.id.tv_invite_member);
+        invite_member.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.e("HomeFrag", "멤버 초대 텍뷰 클릭");
+                View dialog_view = getLayoutInflater().inflate(R.layout.dialog_input_text, null);
+                AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
+                        .setView(dialog_view)
+                        .show();
+                TextView txt_head = dialog_view.findViewById(R.id.tv_dialog_text_input);
+                EditText txt_input = dialog_view.findViewById(R.id.et_dialog_text_input);
+                Button txt_save_btn = dialog_view.findViewById(R.id.btn_dialog_input_save);
+                txt_head.setText("같이 여행 할 멤버를 초대하세요");
+                txt_input.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+                String regex = "^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\\w+\\.)+\\w+$";
+                Pattern p = Pattern.compile(regex);
+                txt_save_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        BodyToken bodyToken = new BodyToken("0000");
+                        Call<JsonObject> jsonObjectCall = retrofitAPI.joinNewUserToTravel(user_id, String.valueOf(travel_id), txt_input.getText().toString(), bodyToken);
+                        jsonObjectCall.enqueue(new Callback<JsonObject>() {
+                            @Override
+                            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                                Log.e(TAG, "retrofit success");
+                                alertDialog.dismiss();
+                            }
+
+                            @Override
+                            public void onFailure(Call<JsonObject> call, Throwable t) {
+                                Log.e(TAG, "retrofit failed");
+                            }
+                        });
+//                        Matcher m = p.matcher(txt_input.getText());
+//                        if (m.matches()) {
+//                            if (!txt_input.getText().toString().equals("")){
+//                                Log.e("멤버 초대", "이메일 " + txt_input.getText());
+//                                //todo 이메일로 유저아이디 보내서 초대하기
+//                            }
+//                        }else {
+//                            Toast.makeText(getContext(), "이메일 형식에 맞게 입력하세요", Toast.LENGTH_SHORT).show();
+//                        }
+                    }
+                });
+            }
+        });
         /*초대 멤버 관리*/
         invited_member_list = new ArrayList<>();
         rv_members = getView().findViewById(R.id.rv_invited_member);
@@ -204,7 +252,6 @@ public class HomeFragment extends Fragment {
         });
 
         /*기존 여행 선택 시*/
-        RetrofitAPI retrofitAPI = RetrofitSingleton.getRetrofitInstance().create(RetrofitAPI.class);
         Intent intent = getActivity().getIntent();
         SimpleDateFormat dateFormat = new SimpleDateFormat(USER_FORMAT);
         if (intent != null) {
@@ -218,6 +265,7 @@ public class HomeFragment extends Fragment {
                     JsonObject data = body.getAsJsonObject("data");
                     JsonObject travelJson = data.getAsJsonObject("resultTravelData");
                     Travel travel = new Gson().fromJson(travelJson, Travel.class);
+                    // 기존 데이터 삽입
                     travel_id = Integer.parseInt(travel.getTravelId());
                     travel_name.setText(travel.getTravelName());
                     start_date.setText(dateFormat.format(travel.getStartDate()));
@@ -230,19 +278,18 @@ public class HomeFragment extends Fragment {
                     JsonArray JoinedUserList = data.getAsJsonArray("joinedUserList");
                     for (int i = 0; i < JoinedUserList.size(); i++) {
                         JsonObject object = JoinedUserList.get(i).getAsJsonObject();
-//                        Log.e(TAG, String.valueOf(object));
                         JsonObject object1 = object.getAsJsonObject("user");
-//                        Log.e(TAG, String.valueOf(object1.get("userId")));
                         JsonElement element = object1.get("userId");
-                        invited_member_list.add(element.getAsString());
+                        user_id = element.getAsString();
+                        invited_member_list.add(user_id);
                         rv_members.setAdapter(new MemberAdapter(getActivity(), invited_member_list));
                     }
 
-                    Glide.with(HomeFragment.this)
-                            .load("http://192.249.21.206:3000/src/images/933374-viewom.jpg")
-                            .error(R.drawable.ic_baseline_clear_24)
-                            .centerCrop()
-                            .into(travel_cover);
+//                    Glide.with(HomeFragment.this)
+//                            .load("http://192.249.21.206:3000/src/images/933374-viewom.jpg")
+//                            .error(R.drawable.ic_baseline_clear_24)
+//                            .centerCrop()
+//                            .into(travel_cover);
                 }
 
                 @Override
@@ -257,15 +304,40 @@ public class HomeFragment extends Fragment {
         travel_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Map<String, String> map = new HashMap<>();
+                map.put("userId", user_id);
+
+                Call<JsonObject> jsonObjectCall = retrofitAPI.deleteTravel(user_id, travel_id, map);
                 getActivity().finish();
             }
         });
         //todo:: 여행 정보 업데이트
         travel_save = getView().findViewById(R.id.btn_travel_update);
         travel_save.setOnClickListener(new View.OnClickListener() {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(USER_FORMAT);
+
             @Override
             public void onClick(View view) {
                 Log.e(TAG, "btn_travel_update");
+                Call<JsonObject> jsonObjectCall = retrofitAPI.updateTravel(user_id, travel_id,
+                        travel_name.toString(),
+                        pick_country.toString(),
+                        start_date.toString(),
+                        end_date.toString(),
+                        set_currency.toString(),
+                        null,
+                        "ooh");
+                jsonObjectCall.enqueue(new Callback<JsonObject>() {
+                    @Override
+                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                        Log.e(TAG, "success");
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonObject> call, Throwable t) {
+                        Log.e(TAG, "failed");
+                    }
+                });
 
                 // activity reload
                 getActivity().finish();

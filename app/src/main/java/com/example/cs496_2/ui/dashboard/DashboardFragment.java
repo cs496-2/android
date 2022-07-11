@@ -18,6 +18,7 @@ import com.example.cs496_2.MainActivity;
 import com.example.cs496_2.R;
 import com.example.cs496_2.Retrofit.RetrofitAPI;
 import com.example.cs496_2.Retrofit.RetrofitSingleton;
+import com.example.cs496_2.data.DTO.Spend;
 import com.example.cs496_2.data.DTO.Travel;
 import com.example.cs496_2.data.DTO.TravelSpend;
 import com.example.cs496_2.data.DTO.UserSpend;
@@ -65,42 +66,27 @@ public class DashboardFragment extends Fragment {
         Intent intent = getActivity().getIntent();
         if (intent != null) {
             Log.e(TAG, "I got travelId! " + intent.getStringExtra("travelId"));
-            Call<JsonObject> travelJson = retrofitAPI.getTravelProject(MainActivity.user_id, intent.getStringExtra("travelId"));
+            Call<JsonObject> travelJson = retrofitAPI.getUserSpends(MainActivity.user_id, intent.getStringExtra("travelId"));
             travelJson.enqueue(new Callback<JsonObject>() {
                 @Override
                 public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                     Log.e(TAG, "retrofit success");
                     JsonObject body = response.body();
-                    JsonObject data = body.getAsJsonObject("data");
-                    JsonObject resultTravelData = data.getAsJsonObject("resultTravelData");
-                    Log.e(TAG, String.valueOf(resultTravelData));
-                    JsonArray travelSpends = resultTravelData.getAsJsonArray("travelSpends");
-                    for (int i = 0; i < travelSpends.size(); i++) {
-                        JsonObject object = travelSpends.get(i).getAsJsonObject();
-                        Log.e(TAG, "travelSpend" + i + String.valueOf(object));
-                        TravelSpend travelSpend = new Gson().fromJson(object, TravelSpend.class);
+                    JsonArray data = body.getAsJsonArray("data");
+                    Log.e(TAG, "data :: " + data);
+                    for (int i = 0; i < data.size(); i++) {
+                        JsonObject object = data.get(i).getAsJsonObject();
+                        Log.e(TAG, "object : " + object);
+                        Spend spend = new Gson().fromJson(object, Spend.class);
                         dashboardItems.add(new DashboardItem(
-                                travelSpend.getTravelSpendId(),
-                                travelSpend.getSpendName(),
-                                travelSpend.getSpendAmount(),
-                                travelSpend.getCreatedDate(),
-                                travelSpend.isUseWon(),
-                                travelSpend.getSpendCategory()));
+                                spend.getSpendId(),
+                                spend.getSpendName(),
+                                spend.getSpendAmount(),
+                                spend.getCreatedDate(),
+                                spend.isUseWon(),
+                                spend.getSpendCategory()
+                        ));
                     }
-                    JsonArray userSpends = resultTravelData.getAsJsonArray("userSpends");
-                    for (int i = 0; i < userSpends.size(); i++) {
-                        JsonObject object = userSpends.get(i).getAsJsonObject();
-                        Log.e(TAG, "userSpends" + i + String.valueOf(object));
-                        UserSpend userSpend = new Gson().fromJson(object, UserSpend.class);
-                        dashboardItems.add(new DashboardItem(
-                                userSpend.getUserSpendId(),
-                                userSpend.getSpendName(),
-                                userSpend.getSpendAmount(),
-                                userSpend.getCreatedDate(),
-                                userSpend.isUseWon(),
-                                userSpend.getSpendCategory()));
-                    }
-                    Collections.sort(dashboardItems, new ItemDateComparator());
                     spend_rv.setAdapter(new DashboardAdapter(getActivity(), dashboardItems));
                 }
 
