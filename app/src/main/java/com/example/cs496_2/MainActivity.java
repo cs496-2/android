@@ -28,12 +28,12 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity {
     private final String TAG = "----------MainActivity";
 
+    public static String user_id = "abepje1";//todo: login 후 userId
+
     private RecyclerView travelRV;
     private TravelsAdapter travelsAdapter;
     private ArrayList<TravelsModel> travelsModels;
     private FloatingActionButton fabAddTravel;
-
-    LiveData<ArrayList<Travel>> viewModel = new TravelViewModel().getTravels();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,16 +63,16 @@ public class MainActivity extends AppCompatActivity {
                 Log.e(TAG, "retrofit successed");
                 Log.d(TAG, String.valueOf(response));
                 JsonObject res = response.body();
-                JsonArray body = res.getAsJsonArray("data");
-                ArrayList<Travel> travels = new ArrayList<Travel>();
-                Log.e(TAG, String.valueOf(body));
+                JsonArray dataArr = res.getAsJsonArray("data");
+                ArrayList<Travel> travels = new ArrayList<>();
+                Log.e(TAG, String.valueOf(dataArr));
                 // 리사이클러뷰에 표시할 데이터 리스트 생성.
                 travelsModels = new ArrayList<>();
-                for(int i = 0; i< body.size();i++){
-                    JsonObject travelItem = body.get(i).getAsJsonObject();
+                for(int i = 0; i< dataArr.size();i++){
+                    JsonObject travelItem = dataArr.get(i).getAsJsonObject();
                     Travel travel = new Gson().fromJson(travelItem, Travel.class);
                     travels.add(travel);
-                    Log.e(TAG, "i ::"+travels.get(i).toString());
+                    Log.e(TAG, i+" ::"+travels.get(i).toString());
 
                     travelsModels.add(new TravelsModel(
                             travel.getTravelId(),

@@ -84,4 +84,18 @@ public class TravelUserPair {
     public void setPersonalEtcSpend(int personalEtcSpend) {
         this.personalEtcSpend = personalEtcSpend;
     }
+
+    @Override
+    public String toString() {
+        return "TravelUserPair{" +
+                "travelUserPairId=" + travelUserPairId +
+                ", personalTotalSpend=" + personalTotalSpend +
+                ", personalMealSpend=" + personalMealSpend +
+                ", personalShopSpend=" + personalShopSpend +
+                ", personalTourSpend=" + personalTourSpend +
+                ", personalTransportSpend=" + personalTransportSpend +
+                ", personalHotelSpend=" + personalHotelSpend +
+                ", personalEtcSpend=" + personalEtcSpend +
+                '}';
+    }
 }

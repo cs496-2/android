@@ -126,7 +126,7 @@
                     android:text="여행 삭제" />
 
                 <Button
-                    android:id="@+id/btn_travel_save"
+                    android:id="@+id/btn_travel_update"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

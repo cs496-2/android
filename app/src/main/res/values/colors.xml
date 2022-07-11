@@ -8,4 +8,5 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="please_fill_in_the_blank">#E4EF5F54</color>
+    <color name="default_textview_color">#808080</color>
 </resources>
