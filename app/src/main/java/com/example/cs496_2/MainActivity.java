@@ -34,10 +34,13 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<TravelsModel> travelsModels;
     private FloatingActionButton fabAddTravel;
 
+    RetrofitAPI retrofitAPI;
+    Call<JsonObject> travelJson;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        retrofitAPI = RetrofitSingleton.getRetrofitInstance().create(RetrofitAPI.class);
 
         // 여행 프로젝트 추가 버튼
         fabAddTravel = findViewById(R.id.fab);
@@ -53,11 +56,20 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        setTravelRecyclerView();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        setTravelRecyclerView();
+    }
+
+    public void setTravelRecyclerView() {
         /**
          * 여행 목록 가져오기 ok
          * */
-        RetrofitAPI retrofitAPI = RetrofitSingleton.getRetrofitInstance().create(RetrofitAPI.class);
-        Call<JsonObject> travelJson = retrofitAPI.getAllTravels("abepje1");
+        travelJson = retrofitAPI.getAllTravels(user_id);
         travelJson.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
@@ -89,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
                 travelRV = findViewById(R.id.rv_travels);
                 travelRV.setLayoutManager(new LinearLayoutManager(MainActivity.this));
 
-                // 리사이클러뷰에 travelAdapter 객체 지정.
+                // 리사이클러뷰에 travelAdapter 객체 지정. 이벤트 클릭 메소드 포함.
                 travelsAdapter = new TravelsAdapter(MainActivity.this, travelsModels);
                 travelRV.setAdapter(travelsAdapter);
             }
@@ -99,6 +111,5 @@ public class MainActivity extends AppCompatActivity {
                 Log.e(TAG, "retrofit failed");
             }
         });
-
     }
 }

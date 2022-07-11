@@ -8,7 +8,9 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.InputType;
@@ -71,13 +73,16 @@ public class HomeFragment extends Fragment {
     private ImageView travel_cover;
     private String imagePath;
     private final int GALLERY = 100; // 갤러리 선택 시 인텐트로 보내는 값
+    private boolean imgChanged = false;
 
     private Button travel_delete;
     private Button travel_save;
+    private Intent intent;
+    private String travelIdExist;
 
     private static final String DB_FORMAT = "";
-    private static final String USER_FORMAT = "yyyy년 MM월 dd일";
-    private String token="oooo";
+    private static final String USER_FORMAT = "yyyy.MM.dd";
+    private String token = "oooo";
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -125,7 +130,7 @@ public class HomeFragment extends Fragment {
         DatePickerDialog startDatePicker = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                start_date.setText(i + "-" + (i1 + 1) + "-" + i2 );
+                start_date.setText(i + "." + (i1 + 1) + "." + i2);
                 start_date.setBackground(null);
             }
         }, start_year, start_month, start_day);
@@ -144,7 +149,7 @@ public class HomeFragment extends Fragment {
         DatePickerDialog endDatePicker = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                end_date.setText(i + "-" + (i1 + 1) + "-" + i2 );
+                end_date.setText(i + "." + (i1 + 1) + "." + i2);
                 end_date.setBackground(null);
             }
         }, end_year, end_month, end_day);
@@ -182,7 +187,7 @@ public class HomeFragment extends Fragment {
                         // todo: 국가 선택 string list 넣기
                         pick_country.setText(String.valueOf(country_picker.getValue()));
                         // todo: 화폐 자동 완성
-                        set_currency.setText("🇺🇸 USD");
+                        set_currency.setText("USD");
                         country_picker_dialog.dismiss();
                     }
                 });
@@ -210,7 +215,7 @@ public class HomeFragment extends Fragment {
                     @Override
                     public void onClick(View view) {
                         JsonObject token = new JsonObject();
-                        token.addProperty("token","oooo");
+                        token.addProperty("token", "oooo");
                         Call<JsonObject> jsonObjectCall = retrofitAPI.joinNewUserToTravel(user_id, String.valueOf(travel_id), txt_input.getText().toString(), token);
                         jsonObjectCall.enqueue(new Callback<JsonObject>() {
                             @Override
@@ -253,76 +258,67 @@ public class HomeFragment extends Fragment {
         });
 
         /*기존 여행 선택 시*/
-        Intent intent = getActivity().getIntent();
+        intent = getActivity().getIntent();
         SimpleDateFormat dateFormat = new SimpleDateFormat(USER_FORMAT);
-        if (intent != null) {
-            Log.e(TAG, "I got travelId! " + intent.getStringExtra("travelId"));
-            Call<JsonObject> travelJson = retrofitAPI.getTravelProject(user_id, intent.getStringExtra("travelId"));
-            travelJson.enqueue(new Callback<JsonObject>() {
-                @Override
-                public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                    Log.e(TAG, "retrofit success");
-                    JsonObject body = response.body();
-                    JsonObject data = body.getAsJsonObject("data");
-                    JsonObject travelJson = data.getAsJsonObject("resultTravelData");
-                    Travel travel = new Gson().fromJson(travelJson, Travel.class);
-                    // 기존 데이터 삽입
-                    travel_id = Integer.parseInt(travel.getTravelId());
-                    travel_name.setText(travel.getTravelName());
-                    start_date.setText(dateFormat.format(travel.getStartDate()));
-                    start_date.setBackground(null);
-                    end_date.setText(dateFormat.format(travel.getEndDate()));
-                    end_date.setBackground(null);
-                    pick_country.setText(travel.getTravelCountry());
-                    pick_country.setTextColor(Color.parseColor(TEXTVIEW_DEFAULT_COLOR));
-                    Log.e(TAG, String.valueOf(travelJson));
-                    JsonArray JoinedUserList = data.getAsJsonArray("joinedUserList");
-                    for (int i = 0; i < JoinedUserList.size(); i++) {
-                        JsonObject object = JoinedUserList.get(i).getAsJsonObject();
-                        JsonObject object1 = object.getAsJsonObject("user");
-                        JsonElement element = object1.get("userId");
-                        user_id = element.getAsString();
-                        invited_member_list.add(user_id);
-                        rv_members.setAdapter(new MemberAdapter(getActivity(), invited_member_list));
-                    }
+        travelIdExist = intent.getStringExtra("travelId");
+        Log.e(TAG, "I got travelId! " + travelIdExist);
+        Call<JsonObject> travelJson = retrofitAPI.getTravelProject(user_id, travelIdExist);
+        travelJson.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                Log.e(TAG, "retrofit success");
+                JsonObject body = response.body();
+                JsonObject data = body.getAsJsonObject("data");
+                JsonObject travelJson = data.getAsJsonObject("resultTravelData");
+                Travel travel = new Gson().fromJson(travelJson, Travel.class);
+                // 기존 데이터 불러오기
+                travel_id = Integer.parseInt(travel.getTravelId());
+                travel_name.setText(travel.getTravelName());
+                start_date.setText(dateFormat.format(travel.getStartDate()));
+                start_date.setBackground(null);
+                end_date.setText(dateFormat.format(travel.getEndDate()));
+                end_date.setBackground(null);
+                pick_country.setText(travel.getTravelCountry());
+                pick_country.setTextColor(Color.parseColor(TEXTVIEW_DEFAULT_COLOR));
+                Log.e(TAG, String.valueOf(travelJson));
+                JsonArray JoinedUserList = data.getAsJsonArray("joinedUserList");
+                for (int i = 0; i < JoinedUserList.size(); i++) {
+                    JsonObject object = JoinedUserList.get(i).getAsJsonObject();
+                    JsonObject object1 = object.getAsJsonObject("user");
+                    JsonElement element = object1.get("userId");
+                    user_id = element.getAsString();
+                    invited_member_list.add(user_id);
+                    rv_members.setAdapter(new MemberAdapter(getActivity(), invited_member_list));
+                }
 
-                    //이미지 로드
+                //이미지 로드
 //                    Glide.with(HomeFragment.this)
 //                            .load("http://192.249.21.206:3000/src/images/933374-viewom.jpg")
 //                            .error(R.drawable.ic_baseline_clear_24)
 //                            .centerCrop()
 //                            .into(travel_cover);
-                }
+            }
 
-                @Override
-                public void onFailure(Call<JsonObject> call, Throwable t) {
-                    Log.e(TAG, "retrofit failed");
-                }
-            });
-        }
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e(TAG, "retrofit failed");
+            }
+        });
 
         //todo:: 여행 정보 삭제
         travel_delete = getView().findViewById(R.id.btn_travel_delete);
         travel_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                UpdateTravel updateTravel = new UpdateTravel(
-                        travel_name.toString(),
-                        pick_country.toString(),
-                        start_date.toString(),
-                        end_date.toString(),
-                        set_currency.toString(),
-                        "none",
-                        token
-                );
-
-                Call<JsonObject> jsonObjectCall = retrofitAPI.deleteTravel(user_id, travel_id, updateTravel);
+                BitmapDrawable bitmapDrawable = (BitmapDrawable) travel_cover.getDrawable();
+                Bitmap bitmap = bitmapDrawable.getBitmap();
+                Call<JsonObject> jsonObjectCall = retrofitAPI.deleteTravel(user_id, travel_id);
                 jsonObjectCall.enqueue(new Callback<JsonObject>() {
                     @Override
                     public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                         Log.e(TAG, "여행 삭제 success");
                     }
+
                     @Override
                     public void onFailure(Call<JsonObject> call, Throwable t) {
                         Log.e(TAG, "여행 삭제 failed");
@@ -334,61 +330,59 @@ public class HomeFragment extends Fragment {
         //todo:: 여행 정보 업데이트
         travel_save = getView().findViewById(R.id.btn_travel_update);
         travel_save.setOnClickListener(new View.OnClickListener() {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(USER_FORMAT);
-
             @Override
             public void onClick(View view) {
-                if (intent != null) {//기존 정보 있음 -> 업데이트
+                if (travelIdExist != null) {//기존 정보 있음 -> 업데이트
                     Log.e(TAG, "btn_travel_update");
-                    UpdateTravel updateTravel = new UpdateTravel(
-                            travel_name.toString(),
-                            pick_country.toString(),
-                            start_date.toString(),
-                            end_date.toString(),
-                            set_currency.toString(),
-                            null,
-                            token
-                    );
+                    JsonObject updateTravel = new JsonObject();
+                    updateTravel.addProperty("travelName", travel_name.getText().toString());
+                    updateTravel.addProperty("travelCountry", pick_country.getText().toString());
+                    updateTravel.addProperty("startDate", start_date.getText().toString());
+                    updateTravel.addProperty("endDate", end_date.getText().toString());
+                    updateTravel.addProperty("foreignCurrency", set_currency.getText().toString());
+                    updateTravel.addProperty("coverImg", "none");
+                    updateTravel.addProperty("token", "token");
                     Call<JsonObject> jsonObjectCall = retrofitAPI.updateTravel(user_id, travel_id, updateTravel);
                     jsonObjectCall.enqueue(new Callback<JsonObject>() {
                         @Override
                         public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                             Log.e(TAG, "여행 수정 success");
                         }
+
                         @Override
                         public void onFailure(Call<JsonObject> call, Throwable t) {
                             Log.e(TAG, "여행 수정 failed");
                         }
                     });
+                    getActivity().finish();
+                    getActivity().overridePendingTransition(0, 0);
+                    startActivity(getActivity().getIntent());
+                    getActivity().overridePendingTransition(0, 0);
                 } else {//기존 정보 없음 -> 새로 POST
-                    PostNewTravel postNewTravel = new PostNewTravel(
-                            travel_name.toString(),
-                            pick_country.toString(),
-                            start_date.toString(),
-                            end_date.toString(),
-                            set_currency.toString(),
-                            "none",
-                            90.0F,
-                            token
-                    );
-                    Call<JsonObject> jsonObjectCall = retrofitAPI.postNewTravel(user_id, travel_id, postNewTravel);
+                    JsonObject newTravel = new JsonObject();
+                    newTravel.addProperty("travelName", travel_name.getText().toString());
+                    newTravel.addProperty("travelCountry", pick_country.getText().toString());
+                    newTravel.addProperty("startDate", start_date.getText().toString());
+                    newTravel.addProperty("endDate", end_date.getText().toString());
+                    newTravel.addProperty("foreignCurrency", set_currency.getText().toString());
+                    newTravel.addProperty("coverImg", "none");
+                    newTravel.addProperty("exchangeRate", "90.2");
+                    newTravel.addProperty("token", "token");
+                    Log.e(TAG, "new travel : " + newTravel);
+                    Call<JsonObject> jsonObjectCall = retrofitAPI.postNewTravel(user_id, newTravel);
                     jsonObjectCall.enqueue(new Callback<JsonObject>() {
                         @Override
                         public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                             Log.e(TAG, "여행 생성 success");
                         }
+
                         @Override
                         public void onFailure(Call<JsonObject> call, Throwable t) {
                             Log.e(TAG, "여행 생성 failed");
                         }
                     });
+                    getActivity().finish();
                 }
-
-                // activity reload
-                getActivity().finish();
-                getActivity().overridePendingTransition(0, 0);
-                startActivity(getActivity().getIntent());
-                getActivity().overridePendingTransition(0, 0);
             }
         });
     }
@@ -423,6 +417,7 @@ public class HomeFragment extends Fragment {
                         .centerCrop()
                         .into(travel_cover);
             }
+            imgChanged = true;
         }
     }
 }

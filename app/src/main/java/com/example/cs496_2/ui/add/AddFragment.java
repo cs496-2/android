@@ -71,7 +71,7 @@ public class AddFragment extends Fragment {
             }
         }, year, month, day);
         datePickerDialog.updateDate(year, month, day);
-        spend_create_date.setText(year + "." + (month + 1) + "." + day + ".");
+        spend_create_date.setText(year + "." + (month + 1) + "." + day);
         spend_create_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -128,28 +128,20 @@ public class AddFragment extends Fragment {
         save_spend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                PostNewSpend spend = new PostNewSpend(isPersonalSpend,
-//                        spend_name.toString(),
-//                        spend_create_date.getText() + " " + spend_create_time.getText(),
-//                        Integer.parseInt(editTextNumberSigned.toString()),
-//                        isWon,
-//                        category
-//                );
-
                 JsonObject spend = new JsonObject();
                 spend.addProperty("isUserSpend", isPersonalSpend);
-                spend.addProperty("spendName", spend_name.toString());
-                spend.addProperty("createdDate", spend_create_date.getText() + " " + spend_create_time.getText());
-                spend.addProperty("spendAmount", Integer.parseInt(editTextNumberSigned.getText().toString()));
+                spend.addProperty("spendName", spend_name.getText()+"");//꼭 getText 안하면 인스턴스 이름을 반환함
+                String dateStr = spend_create_date.getText() + " " + spend_create_time.getText();
+                spend.addProperty("createdDate", dateStr);//날짜 형식 텍스트여도 됨.
+                spend.addProperty("spendAmount", editTextNumberSigned.getText().toString());
                 spend.addProperty("useWon", isWon);
                 spend.addProperty("spendCategory",category);
-                Call<JsonObject> jsonObjectCall = api.postNewSpends(user_id, travel_id, spend);
+                Call<JsonObject> jsonObjectCall = api.postNewSpend(user_id, travel_id, spend);
                 jsonObjectCall.enqueue(new Callback<JsonObject>() {
                     @Override
                     public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                         Log.e("지출내용", "저장성공");
                     }
-
                     @Override
                     public void onFailure(Call<JsonObject> call, Throwable t) {
                         Log.e("지출내용", "저장실패");

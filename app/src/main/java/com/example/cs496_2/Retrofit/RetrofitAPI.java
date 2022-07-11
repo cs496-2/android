@@ -20,8 +20,8 @@ public interface RetrofitAPI {
 
     /* 여행 프로젝트에 새 지출 추가 */
     @POST("/user/{userId}/{travelId}")
-    Call<JsonObject> postNewSpends(@Path("userId") String userId, @Path("travelId") int travelId,
-                                   @Body JsonObject spend);
+    Call<JsonObject> postNewSpend(@Path("userId") String userId, @Path("travelId") int travelId,
+                                  @Body JsonObject spend);
 
     /* 모든 여행 프로젝트 목록 */
     @GET("/user/{userId}/travels")
@@ -41,17 +41,16 @@ public interface RetrofitAPI {
 
 
     /* 새 여행 프로젝트 정보 저장 */
-    @PUT("/user/{userId}/{travelId}")
-    Call<JsonObject> postNewTravel(@Path("userId") String userId, @Path("travelId") int travelId,
-                                   @Body PostNewTravel postNewTravel);
+    @POST("/user/{userId}/travel")
+    Call<JsonObject> postNewTravel(@Path("userId") String userId,
+                                   @Body JsonObject newTravelJson);
 
     /* 특정 여행 프로젝트 정보 수정 */
     @PUT("/user/{userId}/{travelId}")
     Call<JsonObject> updateTravel(@Path("userId") String userId, @Path("travelId") int travelId,
-                                  @Body UpdateTravel updateTravel);
+                                  @Body JsonObject updateTravelJson);
 
     /* 특정 여행 프로젝트 삭제 */
     @DELETE("/user/{userId}/{travelId}")
-    Call<JsonObject> deleteTravel(@Path("userId") String userId, @Path("travelId") int travelId,
-                                  @Body UpdateTravel updateTravel);
+    Call<JsonObject> deleteTravel(@Path("userId") String userId, @Path("travelId") int travelId);
 }
