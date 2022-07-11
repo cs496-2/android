@@ -53,10 +53,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        String userId = getIntent().getStringExtra("userId");
 
         /*TODO: RETROFIT USE JSON DATA*/
         RetrofitAPI retrofitAPI = RetrofitSingleton.getRetrofitInstance().create(RetrofitAPI.class);
-        Call<JsonObject> travelJson = retrofitAPI.getAllTravels("abepje1");
+        Call<JsonObject> travelJson = retrofitAPI.getAllTravels(userId);
         travelJson.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {

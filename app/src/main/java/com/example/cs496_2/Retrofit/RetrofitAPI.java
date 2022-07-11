@@ -37,4 +37,13 @@ public interface RetrofitAPI {
                                   @Field("token") String token);
 
 
+
+    @PUT("/user/{userId}/travels")
+    Call<JsonObject> loginServer(@Body JsonObject jsonObject, @Path("userId") String userId);
+//
+
+//    @GET("/auth/kakao/redirect")
+//    Call<JsonObject> giveServerToken();
+//    @GET("/auth/kakao/redirect2")
+//    Call<JsonObject> giveServerToken(@Query("") String queryString);
 }
