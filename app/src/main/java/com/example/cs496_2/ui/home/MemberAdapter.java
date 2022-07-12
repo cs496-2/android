@@ -4,11 +4,13 @@ import static com.example.cs496_2.MainActivity.user_id;
 import static com.example.cs496_2.MainActivity.travel_id;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
@@ -17,14 +19,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.cs496_2.R;
 import com.example.cs496_2.Retrofit.RetrofitAPI;
 import com.example.cs496_2.Retrofit.RetrofitSingleton;
+import com.example.cs496_2.TravelActivity;
 import com.example.cs496_2.ui.dashboard.DashboardAdapter;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder> {
+    private final String TAG = "멤버 리스트";
 
     private Context context;
     private ArrayList<String> stringArrayList;
@@ -49,6 +55,24 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder
             public boolean onLongClick(View view) {
                 RetrofitAPI api = RetrofitSingleton.getRetrofitInstance().create(RetrofitAPI.class);
                 Call<JsonObject> call = api.deleteUserFromTravel(user_id, travel_id, member);
+                call.enqueue(new Callback<JsonObject>() {
+                    @Override
+                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                        Log.e(TAG, "멤버 삭제 성공");
+                        Toast.makeText(view.getContext(), member + "가 그룹에서 삭제되었습니다.", Toast.LENGTH_SHORT).show();
+                        // activity reload
+                        ((TravelActivity)context).finish();
+                        ((TravelActivity)context).overridePendingTransition(0, 0);
+                        context.startActivity(((TravelActivity)context).getIntent());
+                        ((TravelActivity)context).overridePendingTransition(0, 0);
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonObject> call, Throwable t) {
+                        Log.e(TAG, "멤버 삭제 실패");
+                        Toast.makeText(view.getContext(), member + "를 삭제하는데 실패했습니다.", Toast.LENGTH_SHORT).show();
+                    }
+                });
                 return true;
             }
         });

@@ -211,24 +211,31 @@ public class HomeFragment extends Fragment {
                 EditText txt_input = dialog_view.findViewById(R.id.et_dialog_text_input);
                 Button txt_save_btn = dialog_view.findViewById(R.id.btn_dialog_input_save);
                 txt_head.setText("같이 여행 할 멤버를 초대하세요");
-                txt_input.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+//                txt_input.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
                 txt_save_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         JsonObject token = new JsonObject();
                         token.addProperty("token", "token");
                         String newMember = txt_input.getText().toString();
+                        Log.e(TAG, "newMember:" + newMember);
                         Call<JsonObject> jsonObjectCall = retrofitAPI.joinNewUserToTravel(user_id, travel_id, newMember, token);
                         jsonObjectCall.enqueue(new Callback<JsonObject>() {
                             @Override
                             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                                Log.e(TAG, "retrofit success");
+                                Log.e(TAG, "여행 멤버 초대 성공");
                                 alertDialog.dismiss();
+                                // activity reload
+                                getActivity().finish();
+                                getActivity().overridePendingTransition(0, 0);
+                                startActivity(getActivity().getIntent());
+                                getActivity().overridePendingTransition(0, 0);
                             }
+
                             @Override
                             public void onFailure(Call<JsonObject> call, Throwable t) {
                                 Toast.makeText(getContext(), newMember + " 유저가 존재하지 않습니다.", Toast.LENGTH_SHORT).show();
-                                Log.e(TAG, "retrofit failed");
+                                Log.e(TAG, "여행 멤버 초대 실패");
                             }
                         });
 //                        String regex = "^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\\w+\\.)+\\w+$";
@@ -274,7 +281,7 @@ public class HomeFragment extends Fragment {
                     Log.e(TAG, String.valueOf(body));
                     JsonObject data = body.getAsJsonObject("data");
                     JsonObject travelJson = data.getAsJsonObject("resultTravelData");
-                    Log.wtf(TAG, "resultTravelData : "+travelJson);
+                    Log.wtf(TAG, "resultTravelData : " + travelJson);
                     Travel travel = new Gson().fromJson(travelJson, Travel.class);
                     // 기존 데이터 불러오기
                     travel_id = travel.getTravelId();
@@ -288,12 +295,14 @@ public class HomeFragment extends Fragment {
                     travel_cover.setImageBitmap(getBitmapFromBase64ForIV(travel.coverImg));
                     Log.e(TAG, String.valueOf(travelJson));
                     JsonArray JoinedUserList = data.getAsJsonArray("joinedUserList");
+                    Log.e(TAG, "JoinedUserList" + JoinedUserList);
                     for (int i = 0; i < JoinedUserList.size(); i++) {
                         JsonObject object = JoinedUserList.get(i).getAsJsonObject();
+                        Log.e(TAG, "JoinedUserList.get(i)" + object);
                         JsonObject object1 = object.getAsJsonObject("user");
                         JsonElement element = object1.get("userId");
-                        user_id = element.getAsString();
-                        invited_member_list.add(user_id);
+                        String joinedUserId = element.getAsString();
+                        invited_member_list.add(joinedUserId);
                         rv_members.setAdapter(new MemberAdapter(getActivity(), invited_member_list));
                     }
 
@@ -373,10 +382,9 @@ public class HomeFragment extends Fragment {
                     newTravel.addProperty("endDate", end_date.getText().toString());
                     newTravel.addProperty("foreignCurrency", set_currency.getText().toString());
                     newTravel.addProperty("coverImg", getStringFromIVForSQLDB(travel_cover));
-                    Log.wtf(TAG, getStringFromIVForSQLDB(travel_cover));
                     newTravel.addProperty("exchangeRate", "90.2");
                     newTravel.addProperty("token", "token");
-                    Log.e(TAG, "new travel : " + newTravel);
+//                    Log.e(TAG, "new travel : " + newTravel);
                     Call<JsonObject> jsonObjectCall = retrofitAPI.postNewTravel(user_id, newTravel);
                     jsonObjectCall.enqueue(new Callback<JsonObject>() {
                         @Override
