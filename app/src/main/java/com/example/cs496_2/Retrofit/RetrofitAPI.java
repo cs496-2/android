@@ -73,4 +73,20 @@ public interface RetrofitAPI {
     /* 특정 여행 프로젝트의 특정 유저 삭제 */
     @DELETE("/user/{userId}/{travelId}/{userId2}")
     Call<JsonObject> deleteUserFromTravel(@Path("userId") String userId, @Path("travelId") int travelId, @Path("userId2") String userId2);
+
+    /* 특정 여행 프로젝트의 모든 일정 조회 */
+    @GET("/user/{userId}/{travelId}/schedule/list")
+    Call<JsonObject> getScheduleFromTravel(@Path("userId") String userId, @Path("travelId") int travelId);
+
+    /* 특정 여행 프로젝트의 특정 날짜 일정 조회 */
+    @GET("/user/{userId}/{travelId}/schedule/list/{date}")
+    Call<JsonObject> getScheduleWithDateFromTravel(@Path("userId") String userId, @Path("travelId") int travelId, @Path("date") String date);
+
+    /* 특정 여행 프로젝트의 일정 추가  */
+    @POST("/user/{userId}/{travelId}/schedule")
+    Call<JsonObject> postSchedule(@Path("userId") String userId, @Path("travelId") int travelId);
+
+    /* 특정 여행 프로젝트의 특정 일정 삭제 */
+    @DELETE("/user/{userId}/{travelId}/schedule/{scheduleId}")
+    Call<JsonObject> deleteSchedule(@Path("userId") String userId, @Path("travelId") int travelId, @Path("scheduleId") int scheduleId);
 }
