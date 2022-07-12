@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private TravelsAdapter travelsAdapter;
     private ArrayList<TravelsModel> travelsModels;
     private FloatingActionButton fabAddTravel;
+    String userId;
 
     RetrofitAPI retrofitAPI;
     Call<JsonObject> travelJson;
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        userId = getIntent().getStringExtra("userId");
         retrofitAPI = RetrofitSingleton.getRetrofitInstance().create(RetrofitAPI.class);
 
         // 여행 프로젝트 추가 버튼
@@ -65,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         setTravelRecyclerView();
     }
-        String userId = getIntent().getStringExtra("userId");
+
 
     @Override
     protected void onRestart() {
