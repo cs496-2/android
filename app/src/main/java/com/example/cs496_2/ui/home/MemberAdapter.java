@@ -4,7 +4,6 @@ import static com.example.cs496_2.MainActivity.user_id;
 import static com.example.cs496_2.MainActivity.travel_id;
 
 import android.content.Context;
-import android.telecom.Call;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +21,8 @@ import com.example.cs496_2.ui.dashboard.DashboardAdapter;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
+
+import retrofit2.Call;
 
 public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder> {
 
@@ -41,15 +42,16 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull MemberAdapter.ViewHolder holder, int position) {
+        String member = stringArrayList.get(position);
         holder.itemView.setVisibility(View.VISIBLE);
-//        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-//            @Override
-//            public boolean onLongClick(View view) {
-//                RetrofitAPI api = RetrofitSingleton.getRetrofitInstance().create(RetrofitAPI.class);
-//                Call<JsonObject> call = api.deleteUserFromTravel(user_id,travel_id,);
-//                return true;
-//            }
-//        });
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                RetrofitAPI api = RetrofitSingleton.getRetrofitInstance().create(RetrofitAPI.class);
+                Call<JsonObject> call = api.deleteUserFromTravel(user_id, travel_id, member);
+                return true;
+            }
+        });
         holder.member_invited.setText(stringArrayList.get(position));
 
     }

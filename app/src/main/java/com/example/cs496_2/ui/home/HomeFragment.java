@@ -27,6 +27,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -215,17 +216,18 @@ public class HomeFragment extends Fragment {
                     @Override
                     public void onClick(View view) {
                         JsonObject token = new JsonObject();
-                        token.addProperty("token", "oooo");
-                        Call<JsonObject> jsonObjectCall = retrofitAPI.joinNewUserToTravel(user_id, travel_id, txt_input.getText().toString(), token);
+                        token.addProperty("token", "token");
+                        String newMember = txt_input.getText().toString();
+                        Call<JsonObject> jsonObjectCall = retrofitAPI.joinNewUserToTravel(user_id, travel_id, newMember, token);
                         jsonObjectCall.enqueue(new Callback<JsonObject>() {
                             @Override
                             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                                 Log.e(TAG, "retrofit success");
                                 alertDialog.dismiss();
                             }
-
                             @Override
                             public void onFailure(Call<JsonObject> call, Throwable t) {
+                                Toast.makeText(getContext(), newMember + " 유저가 존재하지 않습니다.", Toast.LENGTH_SHORT).show();
                                 Log.e(TAG, "retrofit failed");
                             }
                         });
@@ -310,7 +312,7 @@ public class HomeFragment extends Fragment {
             });
         }
 
-        //todo:: 여행 정보 삭제
+        //여행 정보 삭제
         travel_delete = getView().findViewById(R.id.btn_travel_delete);
         travel_delete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -337,7 +339,7 @@ public class HomeFragment extends Fragment {
         travel_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (travelIdExist != 0) {//기존 정보 있음 -> 업데이트
+                if (travel_id != 0) {//기존 정보 있음 -> 업데이트
                     Log.e(TAG, "btn_travel_update");
                     JsonObject updateTravel = new JsonObject();
                     updateTravel.addProperty("travelName", travel_name.getText().toString());
@@ -447,21 +449,12 @@ public class HomeFragment extends Fragment {
 //        return new String(imgBytes);
 //    }
 
-    // =============== [Base64 인코딩] ===============
-    public String getBase64encode(String content){
-        return Base64.encodeToString(content.getBytes(), 0); //TODO Base64 암호화된 문자열로 반환
-    }
-    // =============== [Base64 디코딩 - 문자열 반환] ===============
-    public static String getBase64decode(String content){
-        return new String(Base64.decode(content, 0)); //TODO Base64 암호화된 문자열을 >> 복호화된 원본 문자열로 반환
-    }
-
     //imageView->drawable->byte[]->String(Base64)
     public String getStringFromIVForSQLDB(ImageView iv) {
         iv.buildDrawingCache();
         Bitmap bitmap = iv.getDrawingCache();
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 30, stream);
+        bitmap.compress(Bitmap.CompressFormat.PNG, 10, stream);
         byte[] bytes = stream.toByteArray();
         return Base64.encodeToString(bytes, 0);
     }

@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,7 +51,7 @@ public class TravelsAdapter extends RecyclerView.Adapter<TravelsAdapter.ViewHold
         });
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
 //        holder.travel_cover.setImageResource(R.drawable.default_flights);   // 기본 이미지
-        holder.travel_cover.setImageBitmap(convertByteArrayToBitmap(convertStringToByteArray(model.getCoverImg())));
+        holder.travel_cover.setImageBitmap(getBitmapFromBase64ForIV(model.getCoverImg()));
         holder.travel_name.setText(model.getName());
         holder.travel_date.setText(String.format("%s ~ %s", dateFormat.format(model.getStart_date()), dateFormat.format(model.getEnd_date())));
         holder.travel_total_spend.setText("₩"+ model.getTotal_spend());
@@ -81,23 +82,20 @@ public class TravelsAdapter extends RecyclerView.Adapter<TravelsAdapter.ViewHold
         }
     }
 
-
-    public byte[] convertDrawableToByteArray(Drawable drawable) {
-        Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-        return baos.toByteArray();
+    //imageView->drawable->byte[]->String(Base64)
+    public String getStringFromIVForSQLDB(ImageView iv) {
+        iv.buildDrawingCache();
+        Bitmap bitmap = iv.getDrawingCache();
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 10, stream);
+        byte[] bytes = stream.toByteArray();
+        return Base64.encodeToString(bytes, 0);
     }
 
-    public Bitmap convertByteArrayToBitmap(byte[] imgBytes) {
-        return BitmapFactory.decodeByteArray(imgBytes, 0, imgBytes.length);
-    }
-
-    public byte[] convertStringToByteArray(String imgByteString) {
-        return imgByteString.getBytes();
-    }
-
-    public String convertByteArrayToString(byte[] imgBytes) {
-        return new String(imgBytes);
+    //String(base64)->Bitmap =>imageView
+    public Bitmap getBitmapFromBase64ForIV(String base64) {
+        byte[] decoded = Base64.decode(base64, Base64.DEFAULT);
+        Bitmap byteToBitmap = BitmapFactory.decodeByteArray(decoded, 0, decoded.length);
+        return byteToBitmap;
     }
 }
