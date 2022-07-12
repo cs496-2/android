@@ -161,7 +161,7 @@ public class LoginActivity extends AppCompatActivity {    private final static S
                         @Override
                         public void onFailure(Call<JsonObject> call, Throwable t) {
                             Log.e(TAG, String.valueOf(t));
-                            Log.e(TAG, "retrofit failed");
+                            Log.e(TAG, "login failed");
 //                            Log.e(TAG, )
                         }
                     });

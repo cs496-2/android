@@ -43,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<TravelsModel> travelsModels;
     private FloatingActionButton fabAddTravel;
     private TextView logOutButton;
-    String userId;
 
     RetrofitAPI retrofitAPI;
     Call<JsonObject> travelJson;
@@ -51,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        userId = getIntent().getStringExtra("userId");
+        user_id = getIntent().getStringExtra("userId");
         retrofitAPI = RetrofitSingleton.getRetrofitInstance().create(RetrofitAPI.class);
 
         //로그아웃버튼
@@ -96,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
         travelJson = retrofitAPI.getAllTravels(user_id);
         /*TODO: RETROFIT USE JSON DATA*/
         RetrofitAPI retrofitAPI = RetrofitSingleton.getRetrofitInstance().create(RetrofitAPI.class);
-        Call<JsonObject> travelJson = retrofitAPI.getAllTravels(userId);
+        Call<JsonObject> travelJson = retrofitAPI.getAllTravels(user_id);
         travelJson.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
