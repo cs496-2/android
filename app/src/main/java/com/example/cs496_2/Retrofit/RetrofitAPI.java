@@ -53,6 +53,15 @@ public interface RetrofitAPI {
     @DELETE("/user/{userId}/{travelId}")
     Call<JsonObject> deleteTravel(@Path("userId") String userId, @Path("travelId") int travelId);
 
+
+    @PUT("/user/{userId}/travels")
+    Call<JsonObject> loginServer(@Body JsonObject jsonObject, @Path("userId") String userId);
+//
+
+//    @GET("/auth/kakao/redirect")
+//    Call<JsonObject> giveServerToken();
+//    @GET("/auth/kakao/redirect2")
+//    Call<JsonObject> giveServerToken(@Query("") String queryString);
     /* 특정 지출 내역 삭제 */
     @DELETE("/user/{userId}/{travelId}/delete/{spendId}/{isUserSpend}")
     Call<JsonObject> deleteSpend(@Path("userId") String userId, @Path("travelId") int travelId, @Path("spendId") int spendId, @Path("isUserSpend") Boolean isUserSpend);

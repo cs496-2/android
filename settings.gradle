@@ -12,7 +12,17 @@ dependencyResolutionManagement {
         mavenCentral()
 
         maven { url "https://jitpack.io" } // MPAndroidChart 의존 추가
+        maven { url 'https://devrepo.kakao.com/nexus/content/groups/public/' } // 카카오
     }
 }
 rootProject.name = "cs496_2"
 include ':app'
+
+//allprojects {
+//    repositories {
+//        google()
+//        jcenter()
+//        mavenCentral()
+//        maven { url 'https://devrepo.kakao.com/nexus/content/groups/public/' } // 카카오
+//    }
+//}

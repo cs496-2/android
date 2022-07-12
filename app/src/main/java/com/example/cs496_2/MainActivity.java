@@ -60,12 +60,12 @@ public class MainActivity extends AppCompatActivity {
         // 여행 국가 리스트
 
     }
-
     @Override
     protected void onResume() {
         super.onResume();
         setTravelRecyclerView();
     }
+        String userId = getIntent().getStringExtra("userId");
 
     @Override
     protected void onRestart() {
@@ -78,6 +78,9 @@ public class MainActivity extends AppCompatActivity {
          * 여행 목록 가져오기 ok
          * */
         travelJson = retrofitAPI.getAllTravels(user_id);
+        /*TODO: RETROFIT USE JSON DATA*/
+        RetrofitAPI retrofitAPI = RetrofitSingleton.getRetrofitInstance().create(RetrofitAPI.class);
+        Call<JsonObject> travelJson = retrofitAPI.getAllTravels(userId);
         travelJson.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
