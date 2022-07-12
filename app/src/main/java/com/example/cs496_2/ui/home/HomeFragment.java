@@ -9,8 +9,10 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.InputType;
@@ -35,14 +37,13 @@ import com.bumptech.glide.Glide;
 import com.example.cs496_2.R;
 import com.example.cs496_2.Retrofit.RetrofitAPI;
 import com.example.cs496_2.Retrofit.RetrofitSingleton;
-import com.example.cs496_2.data.DTO.PostNewTravel;
 import com.example.cs496_2.data.DTO.Travel;
-import com.example.cs496_2.data.DTO.UpdateTravel;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -280,6 +281,7 @@ public class HomeFragment extends Fragment {
                 end_date.setBackground(null);
                 pick_country.setText(travel.getTravelCountry());
                 pick_country.setTextColor(Color.parseColor(TEXTVIEW_DEFAULT_COLOR));
+                travel_cover.setImageBitmap(convertByteArrayToBitmap(convertStringToByteArray(travel.coverImg)));
                 Log.e(TAG, String.valueOf(travelJson));
                 JsonArray JoinedUserList = data.getAsJsonArray("joinedUserList");
                 for (int i = 0; i < JoinedUserList.size(); i++) {
@@ -340,7 +342,7 @@ public class HomeFragment extends Fragment {
                     updateTravel.addProperty("startDate", start_date.getText().toString());
                     updateTravel.addProperty("endDate", end_date.getText().toString());
                     updateTravel.addProperty("foreignCurrency", set_currency.getText().toString());
-                    updateTravel.addProperty("coverImg", "none");
+                    updateTravel.addProperty("coverImg", convertByteArrayToString(convertDrawableToByteArray(travel_cover.getDrawable())));
                     updateTravel.addProperty("token", "token");
                     Call<JsonObject> jsonObjectCall = retrofitAPI.updateTravel(user_id, travel_id, updateTravel);
                     jsonObjectCall.enqueue(new Callback<JsonObject>() {
@@ -365,7 +367,7 @@ public class HomeFragment extends Fragment {
                     newTravel.addProperty("startDate", start_date.getText().toString());
                     newTravel.addProperty("endDate", end_date.getText().toString());
                     newTravel.addProperty("foreignCurrency", set_currency.getText().toString());
-                    newTravel.addProperty("coverImg", "none");
+                    newTravel.addProperty("coverImg", convertByteArrayToString(convertDrawableToByteArray(travel_cover.getDrawable())));
                     newTravel.addProperty("exchangeRate", "90.2");
                     newTravel.addProperty("token", "token");
                     Log.e(TAG, "new travel : " + newTravel);
@@ -416,8 +418,28 @@ public class HomeFragment extends Fragment {
                         .error(R.drawable.ic_baseline_clear_24)
                         .centerCrop()
                         .into(travel_cover);
+
             }
             imgChanged = true;
         }
+    }
+
+    public byte[] convertDrawableToByteArray(Drawable drawable) {
+        Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        return baos.toByteArray();
+    }
+
+    public Bitmap convertByteArrayToBitmap(byte[] imgBytes) {
+        return BitmapFactory.decodeByteArray(imgBytes, 0, imgBytes.length);
+    }
+
+    public byte[] convertStringToByteArray(String imgByteString) {
+        return imgByteString.getBytes();
+    }
+
+    public String convertByteArrayToString(byte[] imgBytes) {
+        return new String(imgBytes);
     }
 }
