@@ -17,7 +17,7 @@
         android:usesCleartextTraffic="true">
         <meta-data
             android:name="com.kakao.sdk.AppKey"
-            android:value="${KAKAO_NATIVE_APP_KEY}" />
+            android:value="fea2bbbf76a6c2fc180a859de172c406" />
         <activity
             android:name=".TravelActivity"
             android:exported="false"
@@ -52,7 +52,7 @@
                 <!--Redirect URI: "kakao{NATIVE_APP_KEY}://oauth"-->
                 <data
                     android:host="oauth"
-                    android:scheme="kakao${KAKAO_NATIVE_APP_KEY}"/>
+                    android:scheme="kakaofea2bbbf76a6c2fc180a859de172c406"/>
             </intent-filter>
         </activity>
     </application>

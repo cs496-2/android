@@ -56,6 +56,10 @@ public interface RetrofitAPI {
 
     @PUT("/user/{userId}/travels")
     Call<JsonObject> loginServer(@Body JsonObject jsonObject, @Path("userId") String userId);
+
+
+    @PUT("/user/{userId}/logout")
+    Call<JsonObject> logoutServer(@Path("userId") String userId);
 //
 
 //    @GET("/auth/kakao/redirect")
