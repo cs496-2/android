@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.cs496_2.Retrofit.RetrofitAPI;
 import com.example.cs496_2.Retrofit.RetrofitSingleton;
@@ -17,6 +19,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+
+import org.w3c.dom.Text;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -38,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private TravelsAdapter travelsAdapter;
     private ArrayList<TravelsModel> travelsModels;
     private FloatingActionButton fabAddTravel;
+    private TextView logOutButton;
     String userId;
 
     RetrofitAPI retrofitAPI;
@@ -48,6 +53,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         userId = getIntent().getStringExtra("userId");
         retrofitAPI = RetrofitSingleton.getRetrofitInstance().create(RetrofitAPI.class);
+
+        //로그아웃버튼
+        logOutButton = findViewById(R.id.tv_logout);
+        logOutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         // 여행 프로젝트 추가 버튼
         fabAddTravel = findViewById(R.id.fab);

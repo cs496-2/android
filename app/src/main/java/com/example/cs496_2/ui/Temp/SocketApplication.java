@@ -14,6 +14,6 @@ public class SocketApplication extends Application {
         instance = this;
 
         // 네이티브 앱 키로 초기화
-        KakaoSdk.init(this, "@string/KAKAO_NATIVE_APP_KEY");
+        KakaoSdk.init(this, "fea2bbbf76a6c2fc180a859de172c406");
     }
 }

@@ -15,6 +15,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -42,7 +43,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {    private final static String TAG = "유저";
-    private Button kakaoAuth, googleAuth;
+    private ImageButton kakaoAuth, googleAuth;
     public static Context mContext;
     private SharedPreferences sharedPreferences;
     private User currentUser;
@@ -53,6 +54,7 @@ public class LoginActivity extends AppCompatActivity {    private final static S
     private Boolean nextIntent = false;
     private String meetingId;
     private Intent intent;
+    private String loggedinUserId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,19 +142,19 @@ public class LoginActivity extends AppCompatActivity {    private final static S
                     jsonObject.addProperty("userPassword", "1234");
                     jsonObject.addProperty("age", 23);
                     jsonObject.addProperty("isActive", true);
-                    String userId = user.getKakaoAccount().getEmail();
+                    loggedinUserId = user.getKakaoAccount().getEmail();
 
 
 
                     RetrofitAPI retrofitAPI = RetrofitSingleton.getRetrofitInstance().create(RetrofitAPI.class);
-                    Call<JsonObject> travelJson = retrofitAPI.loginServer(jsonObject, userId);
+                    Call<JsonObject> travelJson = retrofitAPI.loginServer(jsonObject, loggedinUserId);
                     travelJson.enqueue(new Callback<JsonObject>() {
 
 
                         @Override
                         public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            intent.putExtra("userId", userId);
+                            intent.putExtra("userId", loggedinUserId);
                             startActivity(intent);
                         }
 
@@ -175,6 +177,28 @@ public class LoginActivity extends AppCompatActivity {    private final static S
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        RetrofitAPI retrofitAPI = RetrofitSingleton.getRetrofitInstance().create(RetrofitAPI.class);
+        Call<JsonObject> travelJson = retrofitAPI.logoutServer(loggedinUserId);
+        travelJson.enqueue(new Callback<JsonObject>() {
+
+
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                loggedinUserId = null;
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e(TAG, String.valueOf(t));
+                Log.e(TAG, "retrofit failed");
+//                            Log.e(TAG, )
+            }
+        });
+
+    }
 
     private void getHashKey() {
         PackageInfo packageInfo = null;
