@@ -1,7 +1,13 @@
 package com.example.cs496_2;
 
+import static com.example.cs496_2.MainActivity.travel_id;
+
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +17,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
@@ -38,11 +45,12 @@ public class TravelsAdapter extends RecyclerView.Adapter<TravelsAdapter.ViewHold
         holder.itemView.setVisibility(View.VISIBLE);
         holder.itemView.setOnClickListener(view -> {    // 여행 리사이클러뷰 누르면 해당 여행 프로젝트 열기
             Intent intent = new Intent(context, TravelActivity.class);
-            intent.putExtra("travelId", model.getTravel_id());
+            travel_id= model.getTravel_id();
             context.startActivity(intent);
         });
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
-        holder.travel_cover.setImageResource(R.drawable.default_flights);   // 기본 이미지
+//        holder.travel_cover.setImageResource(R.drawable.default_flights);   // 기본 이미지
+        holder.travel_cover.setImageBitmap(convertByteArrayToBitmap(convertStringToByteArray(model.getCoverImg())));
         holder.travel_name.setText(model.getName());
         holder.travel_date.setText(String.format("%s ~ %s", dateFormat.format(model.getStart_date()), dateFormat.format(model.getEnd_date())));
         holder.travel_total_spend.setText("₩"+ model.getTotal_spend());
@@ -73,4 +81,23 @@ public class TravelsAdapter extends RecyclerView.Adapter<TravelsAdapter.ViewHold
         }
     }
 
+
+    public byte[] convertDrawableToByteArray(Drawable drawable) {
+        Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        return baos.toByteArray();
+    }
+
+    public Bitmap convertByteArrayToBitmap(byte[] imgBytes) {
+        return BitmapFactory.decodeByteArray(imgBytes, 0, imgBytes.length);
+    }
+
+    public byte[] convertStringToByteArray(String imgByteString) {
+        return imgByteString.getBytes();
+    }
+
+    public String convertByteArrayToString(byte[] imgBytes) {
+        return new String(imgBytes);
+    }
 }

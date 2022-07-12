@@ -15,7 +15,7 @@ import retrofit2.http.Path;
 public interface RetrofitAPI {
     /* 여행 프로젝트에 유저 추가 */
     @POST("/user/{userId}/{travelId}/{invitedUserId}")
-    Call<JsonObject> joinNewUserToTravel(@Path("userId") String userId, @Path("travelId") String travelId, @Path("invitedUserId") String invitedUserId,
+    Call<JsonObject> joinNewUserToTravel(@Path("userId") String userId, @Path("travelId") int travelId, @Path("invitedUserId") String invitedUserId,
                                          @Body JsonObject jsonToken);
 
     /* 여행 프로젝트에 새 지출 추가 */
@@ -29,7 +29,7 @@ public interface RetrofitAPI {
 
     /* 특정 여행 프로젝트 정보 */
     @GET("/user/{userId}/{travelId}")
-    Call<JsonObject> getTravelProject(@Path("userId") String userId, @Path("travelId") String travelId);
+    Call<JsonObject> getTravelProject(@Path("userId") String userId, @Path("travelId") int travelId);
 
     /* 특정 여행 프로젝트의 지출 총합 정보 */
     @GET("/user/{userId}/{travelId}/stats")

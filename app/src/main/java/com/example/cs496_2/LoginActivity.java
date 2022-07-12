@@ -8,6 +8,9 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.net.Uri;
 import android.os.Bundle;
@@ -32,6 +35,7 @@ import com.kakao.sdk.user.UserApiClient;
 import com.kakao.sdk.user.model.User;
 import com.kakao.sdk.common.util.Utility;
 
+import java.io.ByteArrayOutputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -42,7 +46,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class LoginActivity extends AppCompatActivity {    private final static String TAG = "유저";
+public class LoginActivity extends AppCompatActivity {
+    private final static String TAG = "LoginActivity";
     private ImageButton kakaoAuth, googleAuth;
     public static Context mContext;
     private SharedPreferences sharedPreferences;
@@ -59,38 +64,24 @@ public class LoginActivity extends AppCompatActivity {    private final static S
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
 
 //        getHashKey();
-
-        setContentView(R.layout.activity_login);
-//        System.out.println(Uitility.getKeyHash(this));
-
         Function2<OAuthToken, Throwable, Unit> callback = new Function2<OAuthToken, Throwable, Unit>() {
             @Override
             public Unit invoke(OAuthToken oAuthToken, Throwable throwable) {
-                System.out.println("token check");
+                Log.wtf(TAG, "token check");
                 if (oAuthToken != null) {
-                    System.out.println("yes token");
-                    System.out.println(Log.i("user", oAuthToken.getAccessToken() + " " + oAuthToken.getRefreshToken()));
-                    Log.i("user", oAuthToken.getAccessToken() + " " + oAuthToken.getRefreshToken());
-                    Log.i("token", String.valueOf(oAuthToken));
-
-
-
-
-
-
-                    String qs = "code=" + oAuthToken.getAccessToken();
-                    Log.i("token", qs);
-
-
+                    Log.wtf(TAG, "yes token");
+                    Log.wtf(TAG, String.valueOf(oAuthToken));
+                    Log.e(TAG, "oAuthToken.getAccessToken()=" + oAuthToken.getAccessToken());
+                    Log.e(TAG, "oAuthToken.getRefreshToken()=" + oAuthToken.getRefreshToken());
                 }
                 if (throwable != null) {
                     // TBD
-                    System.out.println("invoke: " + throwable.getLocalizedMessage());
-                    Log.w(TAG, "invoke: " + throwable.getLocalizedMessage());
+                    Log.wtf(TAG, "invoke: " + throwable.getLocalizedMessage());
                 }
-                System.out.println("before updateKakaoLoginUi");
+                Log.e(TAG, "before updateKakaoLoginUi");
                 updateKakaoLoginUi();
 
                 return null;
@@ -102,13 +93,13 @@ public class LoginActivity extends AppCompatActivity {    private final static S
         kakaoAuth.setOnClickListener(new View.OnClickListener() {   // 로그인 버튼 클릭 시
             @Override
             public void onClick(View v) {
-                System.out.println("onclicke!!");
+                Log.e(TAG, "onClick btn_login_google");
                 if (UserApiClient.getInstance().isKakaoTalkLoginAvailable(LoginActivity.this)) {
-                    // 카카오톡이 있을 경우?
-                    System.out.println("Yes KAtlak!!");
+                    // 기기에 카카오톡이 깔려 있을 경우
+                    Log.e(TAG, "yes kakaotalk app");
                     UserApiClient.getInstance().loginWithKakaoTalk(LoginActivity.this, callback);
                 } else {
-                    System.out.println("No Katalk!!");
+                    Log.e(TAG, "no kakaotalk app");
                     UserApiClient.getInstance().loginWithKakaoAccount(LoginActivity.this, callback);
                 }
             }
@@ -120,16 +111,14 @@ public class LoginActivity extends AppCompatActivity {    private final static S
 
     public void updateKakaoLoginUi() {
         // 카카오 UI 가져오는 메소드 (로그인 핵심 기능)
-
-        System.out.println("Enternig updateKakaoLoginUi");
+        Log.wtf(TAG, "updateKakaoLoginUi");
 
         UserApiClient.getInstance().me(new Function2<User, Throwable, Unit>() {
             @Override
             public Unit invoke(User user, Throwable throwable) {
-                System.out.println("Entered Invoke...");
+                Log.wtf(TAG, "Entered UserApiClient Invoke...");
                 if (user != null) {
-                    System.out.println("USER COMES OUT");
-                    System.out.println(user);
+                    Log.w(TAG, "USER COMES OUT " + user);
                     // 유저 정보가 정상 전달 되었을 경우
                     Log.i(TAG, "id " + user.getId());   // 유저의 고유 아이디를 불러옵니다.
 //                    Log.i(TAG, "invoke: nickname=" + user.getKakaoAccount().getProfile().getNickname());  // 유저의 닉네임을 불러옵니다.
@@ -143,7 +132,6 @@ public class LoginActivity extends AppCompatActivity {    private final static S
                     jsonObject.addProperty("age", 23);
                     jsonObject.addProperty("isActive", true);
                     loggedinUserId = user.getKakaoAccount().getEmail();
-
 
 
                     RetrofitAPI retrofitAPI = RetrofitSingleton.getRetrofitInstance().create(RetrofitAPI.class);
@@ -169,8 +157,8 @@ public class LoginActivity extends AppCompatActivity {    private final static S
                 if (throwable != null) {
                     // 로그인 시 오류 났을 때
                     // 키해시가 등록 안 되어 있으면 오류 납니다.
-                    System.out.println("no auth key!");
-                    Log.w(TAG, "invoke: " + throwable.getLocalizedMessage());
+                    Log.wtf(TAG, "throwable 있음. no auth key!");
+                    Log.e(TAG, "invoke throwable: " + throwable.getLocalizedMessage());
                 }
                 return null;
             }
@@ -183,8 +171,6 @@ public class LoginActivity extends AppCompatActivity {    private final static S
         RetrofitAPI retrofitAPI = RetrofitSingleton.getRetrofitInstance().create(RetrofitAPI.class);
         Call<JsonObject> travelJson = retrofitAPI.logoutServer(loggedinUserId);
         travelJson.enqueue(new Callback<JsonObject>() {
-
-
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 loggedinUserId = null;
@@ -194,7 +180,6 @@ public class LoginActivity extends AppCompatActivity {    private final static S
             public void onFailure(Call<JsonObject> call, Throwable t) {
                 Log.e(TAG, String.valueOf(t));
                 Log.e(TAG, "retrofit failed");
-//                            Log.e(TAG, )
             }
         });
 
@@ -214,36 +199,10 @@ public class LoginActivity extends AppCompatActivity {    private final static S
             try {
                 MessageDigest md = MessageDigest.getInstance("SHA");
                 md.update(signature.toByteArray());
-                Log.e("KeyHash", Base64.encodeToString(md.digest(), Base64.DEFAULT));	// 해시키를 로그로 찍어서 확인
+                Log.e("KeyHash", Base64.encodeToString(md.digest(), Base64.DEFAULT));    // 해시키를 로그로 찍어서 확인
             } catch (NoSuchAlgorithmException e) {
                 Log.e("KeyHash", "Unable to get MessageDigest. signature=" + signature, e);
             }
         }
     }
-
-
-
-
 }
-
-
-//
-//    private Button google_login;
-//
-//    @Override
-//    protected void onCreate(@Nullable Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_login);
-//
-//        google_login = findViewById(R.id.btn_login_google);
-//        google_login.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://kauth.kakao.com/oauth/authorize?client_id=16c296c98e32e8be9acbc9f9a4d0bc85&redirect_uri=http://127.0.0.1:3000/auth/kakao/redirect&response_type=code"));
-//                startActivity(browserIntent);
-////                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-////                startActivity(intent);
-//            }
-//        });
-//    }
-//}

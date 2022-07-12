@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Travel {
-    public String travelId;
+    public int travelId;
     public String travelName;
     public String travelCountry;
     public Date startDate;
@@ -24,11 +24,11 @@ public class Travel {
     public ArrayList<UserSpend> userSpends = null;
     public ArrayList<TravelUserPair> travelUserPairs = null;
 
-    public Travel(String travelId) {
+    public Travel(int travelId) {
         this.travelId = travelId;
     }
 
-    public Travel(String travelId,
+    public Travel(int travelId,
                   String travelName,
                   String travelCountry,
                   Date startDate,
@@ -66,11 +66,11 @@ public class Travel {
         this.travelUserPairs = travelUserPairs;
     }
 
-    public String getTravelId() {
+    public int getTravelId() {
         return travelId;
     }
 
-    public void setTravelId(String travelId) {
+    public void setTravelId(int travelId) {
         this.travelId = travelId;
     }
 

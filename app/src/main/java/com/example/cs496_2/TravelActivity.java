@@ -17,8 +17,6 @@ public class TravelActivity extends AppCompatActivity {
 
     private ActivityTravelBinding binding;
 
-    public static int travel_id;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

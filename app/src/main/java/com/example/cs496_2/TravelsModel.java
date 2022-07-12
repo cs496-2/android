@@ -5,7 +5,7 @@ import android.graphics.Bitmap;
 import java.util.Date;
 
 public class TravelsModel {
-    private String travel_id;
+    private int travel_id;
     private String name;
     private String country;
     private Date start_date;
@@ -14,7 +14,7 @@ public class TravelsModel {
     private double total_spend = 0.0;
 
     // constructor 여행 프로젝트 생성 시 꼭 받아야 하는 정보
-    public TravelsModel(String travel_id, String name, String country, Date start_date, Date end_date, String coverImg, Double total_spend) {
+    public TravelsModel(int travel_id, String name, String country, Date start_date, Date end_date, String coverImg, Double total_spend) {
         this.travel_id = travel_id;
         this.name = name;
         this.country = country;
@@ -25,10 +25,10 @@ public class TravelsModel {
     }
 
     // getter & setter
-    public String getTravel_id() {
+    public int getTravel_id() {
         return travel_id;
     }
-    public void setTravel_id(String travel_id) {
+    public void setTravel_id(int travel_id) {
         this.travel_id = travel_id;
     }
 

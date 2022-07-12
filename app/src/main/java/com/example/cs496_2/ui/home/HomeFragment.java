@@ -1,7 +1,7 @@
 package com.example.cs496_2.ui.home;
 
 import static com.example.cs496_2.MainActivity.user_id;
-import static com.example.cs496_2.TravelActivity.travel_id;
+import static com.example.cs496_2.MainActivity.travel_id;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -16,6 +16,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.InputType;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,7 +55,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class HomeFragment extends Fragment {
-    private String TAG = "--------------HomeFragment";
+    private String TAG = "----------HomeFragment";
 
     private TextView travel_name;
 
@@ -79,7 +80,7 @@ public class HomeFragment extends Fragment {
     private Button travel_delete;
     private Button travel_save;
     private Intent intent;
-    private String travelIdExist;
+    private int travelIdExist;
 
     private static final String DB_FORMAT = "";
     private static final String USER_FORMAT = "yyyy.MM.dd";
@@ -210,14 +211,12 @@ public class HomeFragment extends Fragment {
                 Button txt_save_btn = dialog_view.findViewById(R.id.btn_dialog_input_save);
                 txt_head.setText("같이 여행 할 멤버를 초대하세요");
                 txt_input.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
-                String regex = "^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\\w+\\.)+\\w+$";
-                Pattern p = Pattern.compile(regex);
                 txt_save_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         JsonObject token = new JsonObject();
                         token.addProperty("token", "oooo");
-                        Call<JsonObject> jsonObjectCall = retrofitAPI.joinNewUserToTravel(user_id, String.valueOf(travel_id), txt_input.getText().toString(), token);
+                        Call<JsonObject> jsonObjectCall = retrofitAPI.joinNewUserToTravel(user_id, travel_id, txt_input.getText().toString(), token);
                         jsonObjectCall.enqueue(new Callback<JsonObject>() {
                             @Override
                             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
@@ -230,6 +229,8 @@ public class HomeFragment extends Fragment {
                                 Log.e(TAG, "retrofit failed");
                             }
                         });
+//                        String regex = "^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\\w+\\.)+\\w+$";
+//                        Pattern p = Pattern.compile(regex);
 //                        Matcher m = p.matcher(txt_input.getText());
 //                        if (m.matches()) {
 //                            if (!txt_input.getText().toString().equals("")){
@@ -259,53 +260,55 @@ public class HomeFragment extends Fragment {
         });
 
         /*기존 여행 선택 시*/
-        intent = getActivity().getIntent();
         SimpleDateFormat dateFormat = new SimpleDateFormat(USER_FORMAT);
-        travelIdExist = intent.getStringExtra("travelId");
-        Log.e(TAG, "I got travelId! " + travelIdExist);
-        Call<JsonObject> travelJson = retrofitAPI.getTravelProject(user_id, travelIdExist);
-        travelJson.enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                Log.e(TAG, "retrofit success");
-                JsonObject body = response.body();
-                JsonObject data = body.getAsJsonObject("data");
-                JsonObject travelJson = data.getAsJsonObject("resultTravelData");
-                Travel travel = new Gson().fromJson(travelJson, Travel.class);
-                // 기존 데이터 불러오기
-                travel_id = Integer.parseInt(travel.getTravelId());
-                travel_name.setText(travel.getTravelName());
-                start_date.setText(dateFormat.format(travel.getStartDate()));
-                start_date.setBackground(null);
-                end_date.setText(dateFormat.format(travel.getEndDate()));
-                end_date.setBackground(null);
-                pick_country.setText(travel.getTravelCountry());
-                pick_country.setTextColor(Color.parseColor(TEXTVIEW_DEFAULT_COLOR));
-                travel_cover.setImageBitmap(convertByteArrayToBitmap(convertStringToByteArray(travel.coverImg)));
-                Log.e(TAG, String.valueOf(travelJson));
-                JsonArray JoinedUserList = data.getAsJsonArray("joinedUserList");
-                for (int i = 0; i < JoinedUserList.size(); i++) {
-                    JsonObject object = JoinedUserList.get(i).getAsJsonObject();
-                    JsonObject object1 = object.getAsJsonObject("user");
-                    JsonElement element = object1.get("userId");
-                    user_id = element.getAsString();
-                    invited_member_list.add(user_id);
-                    rv_members.setAdapter(new MemberAdapter(getActivity(), invited_member_list));
-                }
+        Log.e(TAG, "TravelActivity의  travel_id 받아옴 " + travel_id);
+        if (travel_id != 0) {
+            Call<JsonObject> travelJson = retrofitAPI.getTravelProject(user_id, travel_id);
+            travelJson.enqueue(new Callback<JsonObject>() {
+                @Override
+                public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                    Log.e(TAG, "여행 정보 로드 성공");
+                    JsonObject body = response.body();
+                    Log.e(TAG, String.valueOf(body));
+                    JsonObject data = body.getAsJsonObject("data");
+                    JsonObject travelJson = data.getAsJsonObject("resultTravelData");
+                    Log.wtf(TAG, "resultTravelData : "+travelJson);
+                    Travel travel = new Gson().fromJson(travelJson, Travel.class);
+                    // 기존 데이터 불러오기
+                    travel_id = travel.getTravelId();
+                    travel_name.setText(travel.getTravelName());
+                    start_date.setText(dateFormat.format(travel.getStartDate()));
+                    start_date.setBackground(null);
+                    end_date.setText(dateFormat.format(travel.getEndDate()));
+                    end_date.setBackground(null);
+                    pick_country.setText(travel.getTravelCountry());
+                    pick_country.setTextColor(Color.parseColor(TEXTVIEW_DEFAULT_COLOR));
+                    travel_cover.setImageBitmap(getBitmapFromBase64ForIV(travel.coverImg));
+                    Log.e(TAG, String.valueOf(travelJson));
+                    JsonArray JoinedUserList = data.getAsJsonArray("joinedUserList");
+                    for (int i = 0; i < JoinedUserList.size(); i++) {
+                        JsonObject object = JoinedUserList.get(i).getAsJsonObject();
+                        JsonObject object1 = object.getAsJsonObject("user");
+                        JsonElement element = object1.get("userId");
+                        user_id = element.getAsString();
+                        invited_member_list.add(user_id);
+                        rv_members.setAdapter(new MemberAdapter(getActivity(), invited_member_list));
+                    }
 
-                //이미지 로드
+                    //이미지 로드
 //                    Glide.with(HomeFragment.this)
 //                            .load("http://192.249.21.206:3000/src/images/933374-viewom.jpg")
 //                            .error(R.drawable.ic_baseline_clear_24)
 //                            .centerCrop()
 //                            .into(travel_cover);
-            }
+                }
 
-            @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
-                Log.e(TAG, "retrofit failed");
-            }
-        });
+                @Override
+                public void onFailure(Call<JsonObject> call, Throwable t) {
+                    Log.e(TAG, "여행 정보 로드 실패");
+                }
+            });
+        }
 
         //todo:: 여행 정보 삭제
         travel_delete = getView().findViewById(R.id.btn_travel_delete);
@@ -334,7 +337,7 @@ public class HomeFragment extends Fragment {
         travel_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (travelIdExist != null) {//기존 정보 있음 -> 업데이트
+                if (travelIdExist != 0) {//기존 정보 있음 -> 업데이트
                     Log.e(TAG, "btn_travel_update");
                     JsonObject updateTravel = new JsonObject();
                     updateTravel.addProperty("travelName", travel_name.getText().toString());
@@ -342,7 +345,7 @@ public class HomeFragment extends Fragment {
                     updateTravel.addProperty("startDate", start_date.getText().toString());
                     updateTravel.addProperty("endDate", end_date.getText().toString());
                     updateTravel.addProperty("foreignCurrency", set_currency.getText().toString());
-                    updateTravel.addProperty("coverImg", convertByteArrayToString(convertDrawableToByteArray(travel_cover.getDrawable())));
+                    updateTravel.addProperty("coverImg", getStringFromIVForSQLDB(travel_cover));
                     updateTravel.addProperty("token", "token");
                     Call<JsonObject> jsonObjectCall = retrofitAPI.updateTravel(user_id, travel_id, updateTravel);
                     jsonObjectCall.enqueue(new Callback<JsonObject>() {
@@ -367,7 +370,8 @@ public class HomeFragment extends Fragment {
                     newTravel.addProperty("startDate", start_date.getText().toString());
                     newTravel.addProperty("endDate", end_date.getText().toString());
                     newTravel.addProperty("foreignCurrency", set_currency.getText().toString());
-                    newTravel.addProperty("coverImg", convertByteArrayToString(convertDrawableToByteArray(travel_cover.getDrawable())));
+                    newTravel.addProperty("coverImg", getStringFromIVForSQLDB(travel_cover));
+                    Log.wtf(TAG, getStringFromIVForSQLDB(travel_cover));
                     newTravel.addProperty("exchangeRate", "90.2");
                     newTravel.addProperty("token", "token");
                     Log.e(TAG, "new travel : " + newTravel);
@@ -423,23 +427,50 @@ public class HomeFragment extends Fragment {
             imgChanged = true;
         }
     }
+//
+//    public byte[] convertDrawableToByteArray(Drawable drawable) {
+//        Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
+//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+//        return baos.toByteArray();
+//    }
+//
+//    public Bitmap convertByteArrayToBitmap(byte[] imgBytes) {
+//        return BitmapFactory.decodeByteArray(imgBytes, 0, imgBytes.length);
+//    }
+//
+//    public byte[] convertStringToByteArray(String imgByteString) {
+//        return imgByteString.getBytes();
+//    }
+//
+//    public String convertByteArrayToString(byte[] imgBytes) {
+//        return new String(imgBytes);
+//    }
 
-    public byte[] convertDrawableToByteArray(Drawable drawable) {
-        Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-        return baos.toByteArray();
+    // =============== [Base64 인코딩] ===============
+    public String getBase64encode(String content){
+        return Base64.encodeToString(content.getBytes(), 0); //TODO Base64 암호화된 문자열로 반환
+    }
+    // =============== [Base64 디코딩 - 문자열 반환] ===============
+    public static String getBase64decode(String content){
+        return new String(Base64.decode(content, 0)); //TODO Base64 암호화된 문자열을 >> 복호화된 원본 문자열로 반환
     }
 
-    public Bitmap convertByteArrayToBitmap(byte[] imgBytes) {
-        return BitmapFactory.decodeByteArray(imgBytes, 0, imgBytes.length);
+    //imageView->drawable->byte[]->String(Base64)
+    public String getStringFromIVForSQLDB(ImageView iv) {
+        iv.buildDrawingCache();
+        Bitmap bitmap = iv.getDrawingCache();
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 30, stream);
+        byte[] bytes = stream.toByteArray();
+        return Base64.encodeToString(bytes, 0);
     }
 
-    public byte[] convertStringToByteArray(String imgByteString) {
-        return imgByteString.getBytes();
+    //String(base64)->Bitmap =>imageView
+    public Bitmap getBitmapFromBase64ForIV(String base64) {
+        byte[] decoded = Base64.decode(base64, Base64.DEFAULT);
+        Bitmap byteToBitmap = BitmapFactory.decodeByteArray(decoded, 0, decoded.length);
+        return byteToBitmap;
     }
 
-    public String convertByteArrayToString(byte[] imgBytes) {
-        return new String(imgBytes);
-    }
 }

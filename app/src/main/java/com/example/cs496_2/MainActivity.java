@@ -5,6 +5,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -22,6 +26,7 @@ import com.google.gson.JsonObject;
 
 import org.w3c.dom.Text;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.Reader;
@@ -35,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private final String TAG = "----------MainActivity";
 
     public static String user_id = "abepje1";//todo: login 후 userId
+    public static int travel_id;
     public static RetrofitAPI api;
     public static ArrayList<CountryJson> countryJsons;
 
@@ -102,13 +108,15 @@ public class MainActivity extends AppCompatActivity {
                 Log.e(TAG, "retrofit successed");
                 Log.d(TAG, String.valueOf(response));
                 JsonObject res = response.body();
-                JsonArray dataArr = res.getAsJsonArray("data");
+                Log.e(TAG, String.valueOf(res));
+                JsonObject data = res.getAsJsonObject("data");
+                JsonArray travelJA = data.getAsJsonArray("travelList");
                 ArrayList<Travel> travels = new ArrayList<>();
-                Log.e(TAG, String.valueOf(dataArr));
+                Log.e(TAG, String.valueOf(travelJA));
                 // 리사이클러뷰에 표시할 데이터 리스트 생성.
                 travelsModels = new ArrayList<>();
-                for (int i = 0; i < dataArr.size(); i++) {
-                    JsonObject travelItem = dataArr.get(i).getAsJsonObject();
+                for (int i = 0; i < travelJA.size(); i++) {
+                    JsonObject travelItem = travelJA.get(i).getAsJsonObject();
                     Travel travel = new Gson().fromJson(travelItem, Travel.class);
                     travels.add(travel);
                     Log.e(TAG, i + " ::" + travels.get(i).toString());

@@ -1,7 +1,7 @@
 package com.example.cs496_2.ui.home;
 
 import static com.example.cs496_2.MainActivity.user_id;
-import static com.example.cs496_2.TravelActivity.travel_id;
+import static com.example.cs496_2.MainActivity.travel_id;
 
 import android.content.Context;
 import android.telecom.Call;
