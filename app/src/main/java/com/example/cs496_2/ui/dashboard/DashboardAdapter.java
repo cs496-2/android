@@ -63,6 +63,7 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.View
                 call.enqueue(new Callback<JsonObject>() {
                     @Override
                     public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                        Log.i("response", String.valueOf(response));
                         Log.e("지출 삭제", "성공");
                     }
                     @Override

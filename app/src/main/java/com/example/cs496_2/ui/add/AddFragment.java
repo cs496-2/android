@@ -140,6 +140,7 @@ public class AddFragment extends Fragment {
                 jsonObjectCall.enqueue(new Callback<JsonObject>() {
                     @Override
                     public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                        Log.e("resopnsePOST", String.valueOf(response));
                         Log.e("지출내용", "저장성공");
                     }
                     @Override

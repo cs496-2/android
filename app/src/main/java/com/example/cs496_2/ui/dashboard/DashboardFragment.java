@@ -79,6 +79,12 @@ public class DashboardFragment extends Fragment {
                         JsonObject object = data.get(i).getAsJsonObject();
                         Log.e(TAG, "object : " + object);
                         Spend spend = new Gson().fromJson(object, Spend.class);
+                        if(object.has("userSpendId")){
+                            spend.setSpendId(object.get("userSpendId").getAsInt());
+                        }else{
+                            spend.setSpendId(object.get("travelSpendId").getAsInt());
+                        }
+                        Log.e("spendItem", String.valueOf(spend));
                         dashboardItems.add(new DashboardItem(
                                 spend.getSpendId(),
                                 spend.getSpendName(),
